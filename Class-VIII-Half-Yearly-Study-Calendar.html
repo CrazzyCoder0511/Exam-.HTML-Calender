@@ -344,7 +344,89 @@
     .sidebar{padding:16px 16px 32px}
   }
   @media print{
-    .controls, .side-tab, .sidebar, .side-overlay{display:none}
+    .controls, .side-tab, .sidebar, .side-overlay, .view-toggle{display:none}
+  }
+
+  /* ---------- view toggle (list / calendar) ---------- */
+  .view-toggle{
+    display:inline-flex; margin:16px 0 0; border:1px solid var(--rule); border-radius:20px;
+    padding:2px; background:var(--card); width:max-content;
+  }
+  .view-btn{
+    font:inherit; font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    padding:6px 14px; border:0; border-radius:18px; background:none; color:var(--ink-3); cursor:pointer;
+  }
+  .view-btn.active{background:var(--ink); color:var(--paper)}
+
+  /* ---------- schedule controls (sidebar) ---------- */
+  .side-section{margin-bottom:22px}
+  .side-section h3{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+    color:var(--ink-3); margin:0 0 10px; font-weight:500; border-top:1px solid var(--rule); padding-top:14px;
+  }
+  .exam-row{
+    display:flex; align-items:center; gap:6px; margin-bottom:7px; font-size:12px;
+  }
+  .exam-row label{flex:1 1 auto; color:var(--ink); font-weight:500; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .exam-row input[type="date"]{
+    font:inherit; font-family:var(--mono); font-size:10.5px; background:var(--card); color:var(--ink);
+    border:1px solid var(--rule); border-radius:3px; padding:2px 3px; width:118px; flex:0 0 auto;
+  }
+  .exam-row input[type="text"]{
+    font:inherit; font-family:var(--mono); font-size:10.5px; background:var(--card); color:var(--ink);
+    border:1px solid var(--rule); border-radius:3px; padding:2px 3px; width:64px; flex:0 0 auto;
+  }
+  .weight-row{
+    display:flex; align-items:center; gap:6px; margin-bottom:7px; font-size:12px;
+  }
+  .weight-row label{flex:1 1 auto; color:var(--ink); font-weight:500}
+  .weight-row select{
+    font:inherit; font-family:var(--mono); font-size:10.5px; background:var(--card); color:var(--ink);
+    border:1px solid var(--rule); border-radius:3px; padding:2px 3px; flex:0 0 auto;
+  }
+
+  /* ---------- calendar view ---------- */
+  #calendarView{margin-top:22px}
+  .cal-month{margin-bottom:34px}
+  .cal-month-title{
+    font-family:var(--display); font-weight:600; font-size:20px; letter-spacing:-.02em;
+    margin:0 0 10px; border-top:1.5px solid var(--ink); padding-top:10px;
+  }
+  .cal-grid{
+    display:grid; grid-template-columns:repeat(7,1fr); gap:1px;
+    background:var(--rule); border:1px solid var(--rule);
+  }
+  .cal-dow{
+    background:var(--card); padding:6px 0; text-align:center;
+    font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .cal-cell{
+    background:var(--card); min-height:76px; padding:6px; position:relative;
+  }
+  .cal-cell.empty{background:var(--paper)}
+  .cal-cell.is-today{box-shadow:inset 0 0 0 2px var(--ink)}
+  .cal-daynum{
+    font-family:var(--mono); font-size:11px; color:var(--ink-3); margin-bottom:4px;
+  }
+  .cal-daynum.today{color:var(--ink); font-weight:700}
+  .cal-pill{
+    font-family:var(--mono); font-size:10px; letter-spacing:.02em; line-height:1.3;
+    padding:3px 5px; border-radius:3px; cursor:pointer; overflow:hidden;
+    text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+    margin-bottom:3px;
+  }
+  .cal-pill:last-child{margin-bottom:0}
+  .cal-pill.exam{background:var(--red); color:#fff}
+  .cal-pill.holiday{background:var(--marigold); color:#fff}
+  .cal-pill.leave{background:var(--leaf); color:#fff}
+  .cal-pill.study{background:var(--rule-soft); color:var(--ink-2)}
+  .day.flash{animation:flashHi 1.2s ease}
+  @keyframes flashHi{0%,100%{background:var(--card)}30%{background:var(--rule-soft)}}
+
+  @media (max-width:560px){
+    .cal-cell{min-height:58px; padding:4px}
+    .cal-pill{font-size:9px; -webkit-line-clamp:2}
   }
 
   @media (max-width:560px){
@@ -378,22 +460,36 @@
 <div class="side-overlay" id="sideOverlay"></div>
 <aside class="sidebar" id="sidebar" aria-hidden="true">
   <div class="sidebar-head">
-    <h2>Progress by subject</h2>
+    <h2>Study planner</h2>
     <button class="sidebar-close" id="sideClose" type="button">Close ✕</button>
   </div>
   <div class="sidebar-overall">
     <span class="bignum" id="sideOverallNum">0%</span>
     <span id="sideOverallText">0 of 0 tasks done overall</span>
   </div>
-  <div id="subjectCharts"></div>
+
+  <div class="side-section">
+    <h3>Exam dates &amp; timings</h3>
+    <div id="examControls"></div>
+  </div>
+  <div class="side-section">
+    <h3>Difficulty (sets how many days each subject gets)</h3>
+    <div id="weightControls"></div>
+  </div>
+
+  <div class="side-section">
+    <h3>Progress by subject</h3>
+    <div id="subjectCharts"></div>
+  </div>
 </aside>
 
 <div class="wrap">
 <header>
   <p class="eyebrow"><span>The Shriram Millennium School, Noida</span><span>Class VIII</span><span>2026&ndash;27</span></p>
   <h1>Half Yearly<em>run-up</em></h1>
-  <p class="standfirst">Forty days, twelve papers, one plan. Every chapter in your syllabus is placed on a day
-    before the paper that needs it &mdash; the tight subjects earlier, the ones with a gap later. Tick things off as you go.</p>
+  <p class="standfirst">Set your exam dates and how hard each subject is for you in the <b>Progress</b> panel
+    &mdash; the plan below rebuilds itself automatically: harder subjects get more days, and everything finishes
+    with a clear run-up before its own paper. Tick things off as you go.</p>
 
   <div class="ladder">
     <p class="ladder-head">Your papers, in order</p>
@@ -401,16 +497,22 @@
   </div>
 
   <dl class="strip">
-    <div class="fact"><dt>First paper</dt><dd>Fri 21 Aug &mdash; Computer Practical</dd></div>
-    <div class="fact"><dt>Last paper</dt><dd>Mon 14 Sept &mdash; 2nd Language</dd></div>
-    <div class="fact"><dt>Exam-day timings</dt><dd>In 8:00 am &middot; out 12:15 pm</dd></div>
-    <div class="fact"><dt>3-hour papers</dt><dd>Hindi &middot; Mathematics</dd></div>
+    <div class="fact"><dt>First paper</dt><dd id="factFirst">&ndash;</dd></div>
+    <div class="fact"><dt>Last paper</dt><dd id="factLast">&ndash;</dd></div>
+    <div class="fact"><dt>Papers</dt><dd id="factCount">&ndash;</dd></div>
+    <div class="fact"><dt>Plan runs</dt><dd id="factSpan">&ndash;</dd></div>
   </dl>
 
   <div class="meter">
     <span id="count">0 of 0 done</span>
     <span class="bar"><i id="fill"></i></span>
     <button class="reset" id="reset" type="button">Clear all ticks</button>
+    <button class="reset" id="resetEdits" type="button">Reset exam dates &amp; difficulty</button>
+  </div>
+
+  <div class="view-toggle">
+    <button class="view-btn" id="viewList" type="button" data-view="list">List</button>
+    <button class="view-btn" id="viewCal" type="button" data-view="calendar">Calendar</button>
   </div>
 
   <div class="habit">
@@ -422,6 +524,7 @@
 </header>
 
 <main id="plan"></main>
+<div id="calendarView" style="display:none"></div>
 
 <footer>
   Built from Circular TSMSN/CIRC/26-27/127 (23 July 2026) and the Class VIII Half Yearly syllabus.<br>
@@ -431,210 +534,309 @@
 </div>
 
 <script>
-const PAPERS = [
-  ["Computer Practical","21 Aug","2026-08-21"],["History &amp; Civics","24 Aug","2026-08-24"],
-  ["English Literature","25 Aug","2026-08-25"],["Hindi","27 Aug","2026-08-27"],
-  ["Chemistry","31 Aug","2026-08-31"],["Computer","1 Sept","2026-09-01"],
-  ["Physics","2 Sept","2026-09-02"],["Mathematics","7 Sept","2026-09-07"],
-  ["Biology","8 Sept","2026-09-08"],["Geography","10 Sept","2026-09-10"],
-  ["English Language","11 Sept","2026-09-11"],["2nd Language","14 Sept","2026-09-14"]
+/* ================= fixed reference data ================= */
+const GLOBAL_START = "2026-08-06";
+
+const HOLIDAYS = [
+  {d:"2026-08-15", lab:"Independence Day", kind:"holiday", cap:4},
+  {d:"2026-08-26", lab:"Milad-Un-Nabi", kind:"holiday", cap:4},
+  {d:"2026-08-28", lab:"Raksha Bandhan", kind:"holiday", cap:4},
+  {d:"2026-09-03", lab:"Teacher's Day — half day", kind:"holiday", cap:3},
+  {d:"2026-09-04", lab:"Janmashtami", kind:"holiday", cap:4},
+  {d:"2026-09-09", lab:"Study Leave", kind:"leave", cap:4}
+];
+const HOLIDAY_MAP = Object.fromEntries(HOLIDAYS.map(h => [h.d, h]));
+
+const SUBJ_META = {
+  maths:{label:"Maths", weight:5}, physics:{label:"Physics", weight:5}, chemistry:{label:"Chemistry", weight:5},
+  hindi:{label:"Hindi", weight:4},
+  biology:{label:"Biology", weight:3}, hist:{label:"Hist & Civics", weight:3},
+  englit:{label:"Eng Lit", weight:2}, englang:{label:"Eng Lang", weight:2},
+  geo:{label:"Geography", weight:1}, comp:{label:"Computer", weight:1}, lang2:{label:"2nd Lang", weight:1}
+};
+const WEIGHT_LABELS = {1:"Easy", 2:"Light", 3:"Medium", 4:"Hard", 5:"Very hard"};
+const PACE = {5:1, 4:1.2, 3:1.6, 2:2.2, 1:3};
+
+const EXAMS_DEFAULT = [
+  {key:"comp_practical", subj:"comp", label:"Computer Practical", date:"2026-08-21", dur:"Practical"},
+  {key:"hist", subj:"hist", label:"History & Civics", date:"2026-08-24", dur:"2 hrs"},
+  {key:"englit", subj:"englit", label:"English Literature", date:"2026-08-25", dur:"2 hrs"},
+  {key:"hindi", subj:"hindi", label:"Hindi", date:"2026-08-27", dur:"3 hrs"},
+  {key:"chemistry", subj:"chemistry", label:"Chemistry", date:"2026-08-31", dur:"2 hrs"},
+  {key:"comp_theory", subj:"comp", label:"Computer", date:"2026-09-01", dur:"2 hrs"},
+  {key:"physics", subj:"physics", label:"Physics", date:"2026-09-02", dur:"2 hrs"},
+  {key:"maths", subj:"maths", label:"Mathematics", date:"2026-09-07", dur:"3 hrs"},
+  {key:"biology", subj:"biology", label:"Biology", date:"2026-09-08", dur:"2 hrs"},
+  {key:"geo", subj:"geo", label:"Geography", date:"2026-09-10", dur:"2 hrs"},
+  {key:"englang", subj:"englang", label:"English Language", date:"2026-09-11", dur:"2 hrs"},
+  {key:"lang2", subj:"lang2", label:"2nd Language — French / Sanskrit / Spanish", date:"2026-09-14", dur:"2 hrs"}
 ];
 
-const P = [
-  ["maths","Maths"],["physics","Physics"],["chemistry","Chemistry"],["biology","Biology"],
-  ["englit","Eng Lit"],["englang","Eng Lang"],["hindi","Hindi"],["hist","Hist &amp; Civics"],
-  ["geo","Geography"],["comp","Computer"],["lang2","2nd Lang"],["mixed","All"]
-];
-const KEY = Object.fromEntries(P);
-
-const PLAN = [
-{ph:1,d:"2026-08-06",n:"Thu 6 Aug",k:"study",note:"School day &middot; ~3 hrs",t:[
-  ["maths","Ch 1 Rational Numbers and Ch 2 Exponents &mdash; solve the exercises, don&rsquo;t just read them"],
-  ["physics","Ch 2 Physical Quantities and Measurement &mdash; units, and density numericals"]]},
-{ph:1,d:"2026-08-07",n:"Fri 7 Aug",k:"study",note:"School day",t:[
-  ["maths","Ch 3 Squares and Square Roots, Ch 4 Cubes and Cube Roots"],
-  ["hist","History Ch 1 &mdash; The Beginning of the Modern World"]]},
-{ph:1,d:"2026-08-08",n:"Sat 8 Aug",k:"study",note:"Weekend &middot; ~5 hrs",t:[
-  ["hist","Civics Ch 16 &mdash; The Union Legislature"],
-  ["physics","Ch 3 Force and Pressure &mdash; thrust and pressure numericals"],
-  ["englit","Prose: <i>March</i> &mdash; read it and make character and theme notes"],
-  ["englang","One descriptive essay, written in 40 minutes flat"]]},
-{ph:1,d:"2026-08-09",n:"Sun 9 Aug",k:"study",note:"Weekend &middot; ~5 hrs",t:[
-  ["maths","Ch 11 Algebraic Expressions and Ch 12 Identities"],
-  ["chemistry","Ch 4 Atomic Structure &mdash; practise electronic configurations"],
-  ["englit","Prose: <i>Michelangelo</i>"],
-  ["englang","One informal letter and one notice"]]},
-{ph:1,d:"2026-08-10",n:"Mon 10 Aug",k:"study",note:"School day",t:[
-  ["hist","Civics Ch 17 &mdash; The Union Executive"],
-  ["biology","Ch 1 Transport in Plants &mdash; draw root hair and transpiration diagrams"]]},
-{ph:1,d:"2026-08-11",n:"Tue 11 Aug",k:"study",note:"School day",t:[
-  ["physics","Ch 5 Light Energy, up to Early Sunrise and Sunset &mdash; ray diagrams"],
-  ["hindi","गुंजन &mdash; मेरा नया बचपन, आज की कुण्डलियाँ"]]},
-{ph:1,d:"2026-08-12",n:"Wed 12 Aug",k:"study",note:"School day",t:[
-  ["maths","Ch 16 Understanding Shapes and Ch 17 Special Types of Quadrilaterals"],
-  ["chemistry","Ch 5 Language of Chemistry &mdash; write out 30 formulae from valency"]]},
-{ph:1,d:"2026-08-13",n:"Thu 13 Aug",k:"study",note:"School day",t:[
-  ["hist","Civics Ch 18 &mdash; The Judiciary"],
-  ["englit","Prose: <i>The Grandfather and the Python</i>"]]},
-{ph:1,d:"2026-08-14",n:"Fri 14 Aug",k:"study",note:"School day",t:[
-  ["biology","Ch 2 Reproduction in Plants &mdash; pollination and fertilisation diagrams"],
-  ["geo","Ch 1 Representation of Geographical Features &mdash; scale and contours"]]},
-{ph:1,d:"2026-08-15",n:"Sat 15 Aug",k:"holiday",lab:"Independence Day",note:"Free day &middot; ~6 hrs",t:[
-  ["physics","Ch 7 Sound &mdash; whole chapter, including numericals"],
-  ["chemistry","Ch 6 Chemical Reactions &mdash; balance 20 equations"],
-  ["maths","Ch 24 Data Handling and Ch 25 Probability"],
-  ["englang","Story writing and a narrative essay, both timed"]]},
-{ph:1,d:"2026-08-16",n:"Sun 16 Aug",k:"study",note:"Weekend &middot; ~5 hrs",t:[
-  ["hist","History Ch 5 &mdash; Decline of the Mughal Empire"],
-  ["hindi","गुंजन &mdash; अनोखा बदला, लाख की चूड़ियाँ, रथचक्र"],
-  ["englit","Poetry: <i>The Hero</i> and <i>I Wandered Lonely as a Cloud</i>"],
-  ["englang","Picture composition and one e-mail"]]},
-{ph:1,d:"2026-08-17",n:"Mon 17 Aug",k:"study",note:"School day",t:[
-  ["biology","Ch 3 Asexual Reproduction in Animals (pages 29&ndash;30) and Ch 4 Ecosystems"],
-  ["comp","Ch 1 Cell Referencing and Ch 2 Functions &mdash; on the laptop, not on paper"]]},
-{ph:1,d:"2026-08-18",n:"Tue 18 Aug",k:"study",note:"School day",t:[
-  ["comp","Ch 4 Algorithm and Flowchart, Ch 7 Programming in Python &mdash; type and run every example"],
-  ["geo","Ch 4 Urbanisation &mdash; Causes and Effects"]]},
-{ph:1,d:"2026-08-19",n:"Wed 19 Aug",k:"study",note:"School day",t:[
-  ["comp","Ch 10 Introduction to AI, then drill Excel functions and Python syntax"],
-  ["lang2","Grammar block 1 &mdash; French: articles and verbs &middot; Sanskrit: धातुरूप, शब्दरूप &middot; Spanish: verbos, comparativos"]]},
-{ph:1,d:"2026-08-20",n:"Thu 20 Aug",k:"study",note:"Practical tomorrow",t:[
-  ["comp","Full practical dry run &mdash; an Excel sheet with functions and a Python program, end to end"],
-  ["hist","Quick pass over all five chapters &mdash; the paper is on Monday"]]},
-
-{ph:2,d:"2026-08-21",n:"Fri 21 Aug",k:"exam",paper:"Computer Practical",dur:"Practical",t:[
-  ["hist","Civics Ch 16, 17, 18 &mdash; revise and write out three long answers"]]},
-{ph:2,d:"2026-08-22",n:"Sat 22 Aug",k:"study",note:"Free day",t:[
-  ["hist","History Ch 1 and Ch 5 &mdash; revision and 5-mark answer practice"],
-  ["englit","Revise all three prose lessons"]]},
-{ph:2,d:"2026-08-23",n:"Sun 23 Aug",k:"study",note:"Free day",t:[
-  ["hist","Full revision &mdash; make a one-page list of dates, terms and articles"],
-  ["englit","Revise both poems &mdash; figures of speech and central idea"]]},
-{ph:2,d:"2026-08-24",n:"Mon 24 Aug",k:"exam",paper:"History &amp; Civics",dur:"2 hrs",t:[
-  ["englit","All three prose lessons and both poems &mdash; extract-based practice"]]},
-{ph:2,d:"2026-08-25",n:"Tue 25 Aug",k:"exam",paper:"English Literature",dur:"2 hrs",t:[
-  ["hindi","गुंजन &mdash; पाँचों पाठ, प्रश्नोत्तर दोहराएँ"]]},
-{ph:2,d:"2026-08-26",n:"Wed 26 Aug",k:"holiday",lab:"Milad-Un-Nabi",note:"Full day for Hindi",t:[
-  ["hindi","व्याकरण &mdash; पर्यायवाची, विलोम, अनेक शब्दों के लिए एक शब्द (1&ndash;30), मुहावरे व लोकोक्ति (1&ndash;15)"],
-  ["hindi","वाक्य परिवर्तन &mdash; अशुद्धि संशोधन, काल, लिंग, वचन"],
-  ["hindi","रचनात्मक लेखन &mdash; एक निबंध, एक कहानी/आत्मकथा या चित्र वर्णन, एक औपचारिक पत्र, दो अपठित गद्यांश"]]},
-{ph:2,d:"2026-08-27",n:"Thu 27 Aug",k:"exam",paper:"Hindi",dur:"3 hrs",t:[
-  ["chemistry","Ch 4 Atomic Structure &mdash; revision"]]},
-{ph:2,d:"2026-08-28",n:"Fri 28 Aug",k:"holiday",lab:"Raksha Bandhan",note:"Free day",t:[
-  ["chemistry","Ch 5 Language of Chemistry &mdash; valency and formulae drill"],
-  ["chemistry","Ch 6 Chemical Reactions &mdash; types, and balancing practice"]]},
-{ph:2,d:"2026-08-29",n:"Sat 29 Aug",k:"study",note:"Free day",t:[
-  ["chemistry","Full revision, then one timed paper"],
-  ["physics","Ch 2 and Ch 3 revision &mdash; getting ahead, because Physics only gets one evening later"]]},
-{ph:2,d:"2026-08-30",n:"Sun 30 Aug",k:"study",note:"Heaviest day of the plan &mdash; start early",t:[
-  ["chemistry","Final pass on weak spots only"],
-  ["comp","Theory revision &mdash; Ch 1, 2, 4, 7, 10"],
-  ["physics","Ch 5 and Ch 7 revision, with numericals"]]},
-{ph:2,d:"2026-08-31",n:"Mon 31 Aug",k:"exam",paper:"Chemistry",dur:"2 hrs",t:[
-  ["comp","Final pass &mdash; Excel functions, flowchart symbols, Python syntax, AI terms"]]},
-{ph:2,d:"2026-09-01",n:"Tue 1 Sept",k:"exam",paper:"Computer",dur:"2 hrs",t:[
-  ["physics","Full revision plus a formula sheet &mdash; you already did the chapters on 29&ndash;30 Aug"]]},
-{ph:2,d:"2026-09-02",n:"Wed 2 Sept",k:"exam",paper:"Physics",dur:"2 hrs",t:[
-  ["maths","Ch 1&ndash;4 revision and practice"]]},
-{ph:2,d:"2026-09-03",n:"Thu 3 Sept",k:"holiday",lab:"Teacher's Day &mdash; half day",note:"Home by early afternoon",t:[
-  ["maths","Ch 11, 12, 16, 17 &mdash; practice sets"],
-  ["biology","Ch 1 and Ch 2 revision with diagrams"]]},
-{ph:2,d:"2026-09-04",n:"Fri 4 Sept",k:"holiday",lab:"Janmashtami",note:"Free day",t:[
-  ["maths","Ch 24, Ch 25 and a mixed set from all ten chapters"],
-  ["biology","Ch 3 (pages 29&ndash;30) and Ch 4 Ecosystems"]]},
-{ph:2,d:"2026-09-05",n:"Sat 5 Sept",k:"study",note:"Free day",t:[
-  ["maths","One full paper, 3 hours, timed &mdash; then mark it honestly"],
-  ["biology","Label every diagram from memory"]]},
-{ph:2,d:"2026-09-06",n:"Sun 6 Sept",k:"study",note:"Free day",t:[
-  ["maths","Rework every mistake from yesterday&rsquo;s paper"],
-  ["maths","One-page formula and identity sheet &mdash; this is what you read tomorrow morning"]]},
-{ph:2,d:"2026-09-07",n:"Mon 7 Sept",k:"exam",paper:"Mathematics",dur:"3 hrs",t:[
-  ["biology","Final pass on all four chapters and the diagrams"]]},
-{ph:2,d:"2026-09-08",n:"Tue 8 Sept",k:"exam",paper:"Biology",dur:"2 hrs",t:[
-  ["geo","Ch 1 and Ch 4 revision"]]},
-{ph:2,d:"2026-09-09",n:"Wed 9 Sept",k:"leave",lab:"Study Leave",note:"Full day at home",t:[
-  ["geo","Ch 5 Disasters &mdash; Natural and Human Made"],
-  ["geo","Ch 6 Asia: Land (physical features only) and three blank maps of Asia"],
-  ["englang","Grammar &mdash; verb forms, prepositions, transformation of sentences"]]},
-{ph:2,d:"2026-09-10",n:"Thu 10 Sept",k:"exam",paper:"Geography",dur:"2 hrs",t:[
-  ["englang","Comprehension, one essay, and the formats for letter, notice and e-mail"]]},
-{ph:2,d:"2026-09-11",n:"Fri 11 Sept",k:"exam",paper:"English Language",dur:"2 hrs",t:[
-  ["lang2","Vocabulary and comprehension"]]},
-{ph:2,d:"2026-09-12",n:"Sat 12 Sept",k:"study",note:"Free day",t:[
-  ["lang2","Full grammar revision"],
-  ["lang2","Dialogue, paragraph and translation practice"]]},
-{ph:2,d:"2026-09-13",n:"Sun 13 Sept",k:"study",note:"Free day",t:[
-  ["lang2","One full timed paper, then fix every error"]]},
-{ph:2,d:"2026-09-14",n:"Mon 14 Sept",k:"exam",paper:"2nd Language &mdash; French / Sanskrit / Spanish",dur:"2 hrs",t:[]}
-];
-
-const PHASES = {
-  1:{title:"Phase one &mdash; the first pass",range:"Thu 6 &ndash; Thu 20 August",
-     blurb:"Fifteen days to touch every chapter once, while school is still running normally. Order is set by how little breathing room each subject gets later: History &amp; Civics, English Literature and Computer come first because their papers arrive with almost no gap in front of them."},
-  2:{title:"Phase two &mdash; the exam window",range:"Fri 21 August &ndash; Mon 14 September",
-     blurb:"You are home by about 1 pm on paper days, so each afternoon belongs to the next paper. Four subjects &mdash; Computer theory, Physics, Biology and English Language &mdash; get only one evening of turnaround, so this plan revises them early, in the long gaps."}
+const CONTENT = {
+  comp_practical: [
+    "Ch 1 Cell Referencing and Ch 2 Functions — on the laptop, not on paper",
+    "Ch 4 Algorithm and Flowchart, Ch 7 Programming in Python — type and run every example"
+  ],
+  comp_theory: ["Ch 10 Introduction to AI, then drill Excel functions and Python syntax"],
+  hist: [
+    "History Ch 1 — The Beginning of the Modern World",
+    "Civics Ch 16 — The Union Legislature",
+    "Civics Ch 17 — The Union Executive",
+    "Civics Ch 18 — The Judiciary",
+    "History Ch 5 — Decline of the Mughal Empire"
+  ],
+  englit: [
+    "Prose: March — read it, make character and theme notes",
+    "Prose: Michelangelo",
+    "Prose: The Grandfather and the Python",
+    "Poetry: The Hero and I Wandered Lonely as a Cloud"
+  ],
+  hindi: [
+    "गुंजन — मेरा नया बचपन, आज की कुण्डलियाँ",
+    "गुंजन — अनोखा बदला, लाख की चूड़ियाँ, रथचक्र",
+    "व्याकरण — पर्यायवाची, विलोम, अनेक शब्दों के लिए एक शब्द (1–30), मुहावरे व लोकोक्ति (1–15)",
+    "वाक्य परिवर्तन — अशुद्धि संशोधन, काल, लिंग, वचन",
+    "रचनात्मक लेखन — निबंध, कहानी/आत्मकथा या चित्र वर्णन, औपचारिक पत्र, दो अपठित गद्यांश"
+  ],
+  chemistry: [
+    "Ch 4 Atomic Structure — practise electronic configurations",
+    "Ch 5 Language of Chemistry — write out 30 formulae from valency",
+    "Ch 6 Chemical Reactions — balance 20 equations"
+  ],
+  physics: [
+    "Ch 2 Physical Quantities and Measurement — units, and density numericals",
+    "Ch 3 Force and Pressure — thrust and pressure numericals",
+    "Ch 5 Light Energy, up to Early Sunrise and Sunset — ray diagrams",
+    "Ch 7 Sound — whole chapter, including numericals"
+  ],
+  maths: [
+    "Ch 1 Rational Numbers and Ch 2 Exponents — solve the exercises, don't just read them",
+    "Ch 3 Squares and Square Roots, Ch 4 Cubes and Cube Roots",
+    "Ch 11 Algebraic Expressions and Ch 12 Identities",
+    "Ch 16 Understanding Shapes and Ch 17 Special Types of Quadrilaterals",
+    "Ch 24 Data Handling and Ch 25 Probability"
+  ],
+  biology: [
+    "Ch 1 Transport in Plants — draw root hair and transpiration diagrams",
+    "Ch 2 Reproduction in Plants — pollination and fertilisation diagrams",
+    "Ch 3 (pages 29–30) Asexual Reproduction in Animals and Ch 4 Ecosystems"
+  ],
+  geo: [
+    "Ch 1 Representation of Geographical Features — scale and contours",
+    "Ch 4 Urbanisation — Causes and Effects",
+    "Ch 5 Disasters — Natural and Human Made",
+    "Ch 6 Asia: Land (physical features only) and three blank maps of Asia"
+  ],
+  englang: [
+    "One descriptive essay, written in 40 minutes flat",
+    "One informal letter and one notice",
+    "Story writing and a narrative essay, both timed",
+    "Picture composition and one e-mail",
+    "Grammar — verb forms, prepositions, transformation of sentences"
+  ],
+  lang2: [
+    "Grammar block 1 — French: articles & verbs · Sanskrit: धातुरूप, शब्दरूप · Spanish: verbos, comparativos",
+    "Vocabulary and comprehension",
+    "Dialogue, paragraph and translation practice"
+  ]
 };
 
-/* ---------- render ---------- */
+/* ================= persisted overrides ================= */
+const EOKEY = "tsms-viii-exam-overrides-2627";
+const WOKEY = "tsms-viii-weight-overrides-2627";
+const COKEY = "tsms-viii-checks-2627";
+
+let examOv = {}, weightOv = {}, checkState = {};
+try{ examOv = JSON.parse(localStorage.getItem(EOKEY)) || {}; }catch(e){ examOv = {}; }
+try{ weightOv = JSON.parse(localStorage.getItem(WOKEY)) || {}; }catch(e){ weightOv = {}; }
+try{ checkState = JSON.parse(localStorage.getItem(COKEY)) || {}; }catch(e){ checkState = {}; }
+
+function saveExamOv(){ try{ localStorage.setItem(EOKEY, JSON.stringify(examOv)); }catch(e){} }
+function saveWeightOv(){ try{ localStorage.setItem(WOKEY, JSON.stringify(weightOv)); }catch(e){} }
+function saveChecks(){ try{ localStorage.setItem(COKEY, JSON.stringify(checkState)); }catch(e){} }
+
+function getExams(){
+  return EXAMS_DEFAULT.map(e => Object.assign({}, e, examOv[e.key]))
+    .sort((a,b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+}
+function getWeight(subj){ return weightOv[subj] != null ? weightOv[subj] : SUBJ_META[subj].weight; }
+
 const iso = d => d.toISOString().slice(0,10);
 const TODAY = iso(new Date());
-
-document.getElementById("rungs").innerHTML = PAPERS.map(([n,d,id]) =>
-  `<div class="rung${id < TODAY ? " done":""}"><b>${n}</b><i>${d}</i></div>`).join("");
-
-let html = "", lastPhase = 0, idx = 0;
-for(const day of PLAN){
-  if(day.ph !== lastPhase){
-    if(lastPhase) html += `</div></section>`;
-    const p = PHASES[day.ph];
-    html += `<section class="phase"><div class="phase-head"><p class="range">${p.range}</p>`+
-            `<h2>${p.title}</h2><p>${p.blurb}</p></div><div class="days">`;
-    lastPhase = day.ph;
-  }
-  const isToday = day.d === TODAY;
-  const badges = [];
-  if(isToday) badges.push(`<span class="badge today">Today</span>`);
-  if(day.k === "exam") badges.push(`<span class="badge exam">Paper</span>`);
-  if(day.k === "holiday") badges.push(`<span class="badge holiday">${day.lab}</span>`);
-  if(day.k === "leave") badges.push(`<span class="badge leave">${day.lab}</span>`);
-
-  html += `<article class="day ${day.k}${isToday?" today":""}"${isToday?' id="today"':""}>`+
-    `<div class="day-top"><span class="date">${day.n}</span>${badges.join("")}`+
-    (day.note?`<span class="note">${day.note}</span>`:"")+`</div>`;
-
-  if(day.k === "exam")
-    html += `<p class="paper">${day.paper}<span>${day.dur}</span></p>`;
-
-  if(day.t.length){
-    if(day.k === "exam") html += `<p class="after">After the paper &mdash; next up</p>`;
-    html += `<ul class="tasks">` + day.t.map(([k,txt]) => {
-      const id = "t"+(idx++);
-      return `<li data-subj="${k}"><input type="checkbox" id="${id}"><label for="${id}">`+
-             `<span class="tag" style="--k:var(--${k})">${KEY[k]}</span>`+
-             `<span class="${/[\u0900-\u097F]/.test(txt)?"deva":""}">${txt}</span></label></li>`;
-    }).join("") + `</ul>`;
-  } else {
-    html += `<p class="note" style="margin-top:10px">Nothing after this one. That is the lot.</p>`;
-  }
-  html += `</article>`;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function fmtShort(dstr){
+  const d = new Date(dstr+"T00:00:00");
+  const wk = d.toLocaleDateString("en-GB",{weekday:"short"});
+  const mon = d.toLocaleDateString("en-GB",{month:"short"});
+  return `${wk} ${d.getDate()} ${mon}`;
 }
-html += `</div></section><div class="finish"><h2>That&rsquo;s all twelve.</h2>`+
-  `<p>Regular school resumes on Tuesday 15 September. Whatever the marks say, the habit you built over these forty days is the part that carries forward.</p></div>`;
 
-document.getElementById("plan").innerHTML = html;
+/* ================= the auto-scheduler ================= */
+function buildSchedule(){
+  const exams = getExams();
+  const start = GLOBAL_START, end = exams[exams.length-1].date;
+  const allDays = [];
+  for(let d=new Date(start+"T00:00:00"); iso(d) <= end; d.setDate(d.getDate()+1)) allDays.push(iso(d));
 
-/* ---------- ticking and progress ---------- */
-const boxes = [...document.querySelectorAll("ul.tasks input")];
+  const examByDate = {};
+  exams.forEach(e => { (examByDate[e.date] = examByDate[e.date] || []).push(e); });
+  const examIndexByKey = {};
+  exams.forEach(e => { examIndexByKey[e.key] = allDays.indexOf(e.date); });
+
+  function dayCap(dstr){
+    if(examByDate[dstr]) return 1;
+    if(HOLIDAY_MAP[dstr]) return HOLIDAY_MAP[dstr].cap;
+    const dow = new Date(dstr+"T00:00:00").getDay();
+    return (dow === 0 || dow === 6) ? 4 : 2;
+  }
+
+  const perExamItems = {};
+  exams.forEach(e => {
+    const content = CONTENT[e.key] || [];
+    const revision = [];
+    if(content.length) revision.push("Full revision — quick pass over everything, then a one-page summary sheet");
+    if(e.dur !== "Practical") revision.push("One timed practice paper (or past questions), then fix every mistake");
+    perExamItems[e.key] = content.concat(revision);
+  });
+
+  const daySlots = {};
+  allDays.forEach(d => daySlots[d] = []);
+
+  exams.forEach(e => {
+    const items = perExamItems[e.key];
+    if(!items.length) return;
+    const pace = PACE[getWeight(e.subj)] || 1.6;
+    const neededDays = Math.max(1, Math.ceil(items.length / pace));
+    const examIdx = examIndexByKey[e.key];
+    const winEnd = examIdx - 1;
+    let winStart = Math.max(0, winEnd - neededDays + 1);
+    const winDays = [];
+    for(let i=winStart; i<=winEnd; i++) if(i >= 0) winDays.push(allDays[i]);
+    if(!winDays.length) winDays.push(allDays[Math.max(0, examIdx-1)] || allDays[0]);
+    items.forEach((text, i) => {
+      const pos = Math.min(winDays.length-1, Math.floor(i * winDays.length / items.length));
+      daySlots[winDays[pos]].push({examKey:e.key, subj:e.subj, itemIdx:i, text});
+    });
+  });
+
+  allDays.forEach((d,i) => {
+    const cap = dayCap(d);
+    let guard = 0;
+    while(daySlots[d].length > cap && guard++ < 50){
+      const item = daySlots[d].pop();
+      let placed = false;
+      const maxIdx = examIndexByKey[item.examKey] - 1;
+      for(let radius=1; radius<allDays.length && !placed; radius++){
+        const earlier = i - radius;
+        if(earlier >= 0 && daySlots[allDays[earlier]].length < dayCap(allDays[earlier])){
+          daySlots[allDays[earlier]].push(item); placed = true; break;
+        }
+        const later = i + radius;
+        if(later <= maxIdx && later < allDays.length && daySlots[allDays[later]].length < dayCap(allDays[later])){
+          daySlots[allDays[later]].push(item); placed = true; break;
+        }
+      }
+      if(!placed){ daySlots[d].push(item); break; }
+    }
+  });
+
+  return {allDays, daySlots, exams, examByDate};
+}
+
+/* ================= render ================= */
+function renderAll(){
+  const {allDays, daySlots, exams, examByDate} = buildSchedule();
+  const firstExamDate = exams[0].date, lastExamDate = exams[exams.length-1].date;
+
+  document.getElementById("rungs").innerHTML = exams.map(e =>
+    `<div class="rung${e.date < TODAY ? " done":""}"><b>${esc(e.label)}</b><i>${fmtShort(e.date)}</i></div>`).join("");
+  document.getElementById("factFirst").textContent = `${fmtShort(firstExamDate)} — ${exams[0].label}`;
+  document.getElementById("factLast").textContent = `${fmtShort(lastExamDate)} — ${exams[exams.length-1].label}`;
+  document.getElementById("factCount").textContent = exams.length;
+  document.getElementById("factSpan").textContent = `${fmtShort(GLOBAL_START)} – ${fmtShort(lastExamDate)}`;
+
+  let html = "", phase = 0;
+  allDays.forEach(d => {
+    const newPhase = d < firstExamDate ? 1 : 2;
+    if(newPhase !== phase){
+      if(phase) html += `</div></section>`;
+      if(newPhase === 1){
+        const n = allDays.filter(x => x < firstExamDate).length;
+        html += `<section class="phase"><div class="phase-head"><p class="range">${fmtShort(GLOBAL_START)} &ndash; ${fmtShort(firstExamDate)}</p>`+
+          `<h2>Phase one &mdash; the first pass</h2>`+
+          `<p>${n} days to touch every subject once before the first paper, weighted by difficulty so the hardest subjects get the most runway.</p>`+
+          `</div><div class="days">`;
+      } else {
+        html += `<section class="phase"><div class="phase-head"><p class="range">${fmtShort(firstExamDate)} &ndash; ${fmtShort(lastExamDate)}</p>`+
+          `<h2>Phase two &mdash; the exam window</h2>`+
+          `<p>${exams.length} papers from here. Each day still carries prep for whichever paper is soonest.</p>`+
+          `</div><div class="days">`;
+      }
+      phase = newPhase;
+    }
+
+    const examsToday = examByDate[d] || [];
+    const holiday = HOLIDAY_MAP[d];
+    const isToday = d === TODAY;
+    const kind = examsToday.length ? "exam" : (holiday ? holiday.kind : "study");
+    const dow = new Date(d+"T00:00:00").getDay();
+
+    const badges = [];
+    if(isToday) badges.push(`<span class="badge today">Today</span>`);
+    examsToday.forEach(() => badges.push(`<span class="badge exam">Paper</span>`));
+    if(holiday) badges.push(`<span class="badge ${holiday.kind}">${esc(holiday.lab)}</span>`);
+
+    const note = examsToday.length ? "" : (holiday ? "" : ((dow === 0 || dow === 6) ? "Weekend" : "School day"));
+
+    html += `<article class="day ${kind}${isToday?" today":""}" data-id="${d}"${isToday?' id="today"':""}>`+
+      `<div class="day-top"><span class="date">${fmtShort(d)}</span>${badges.join("")}`+
+      (note ? `<span class="note">${note}</span>` : "")+
+      `</div>`;
+
+    examsToday.forEach(e => {
+      html += `<p class="paper">${esc(e.label)}<span>${esc(e.dur)}</span></p>`;
+    });
+
+    const items = daySlots[d];
+    if(items.length){
+      if(examsToday.length) html += `<p class="after">After the paper &mdash; next up</p>`;
+      html += `<ul class="tasks">` + items.map(it => {
+        const cid = it.examKey + "__" + it.itemIdx;
+        const checked = checkState[cid] ? " checked" : "";
+        return `<li data-subj="${it.subj}" data-cid="${cid}"><input type="checkbox" id="${cid}"${checked}><label for="${cid}">`+
+          `<span class="tag" style="--k:var(--${it.subj})">${esc(SUBJ_META[it.subj].label)}</span>`+
+          `<span class="${/[ऀ-ॿ]/.test(it.text)?"deva":""}">${esc(it.text)}</span></label></li>`;
+      }).join("") + `</ul>`;
+    } else if(examsToday.length){
+      html += `<p class="note" style="margin-top:10px">Nothing after this one. That is the lot.</p>`;
+    }
+    html += `</article>`;
+  });
+  html += `</div></section><div class="finish"><h2>That&rsquo;s all ${exams.length}.</h2>`+
+    `<p>Move any exam date or difficulty in the Progress panel any time and this plan rebuilds itself around it.</p></div>`;
+
+  document.getElementById("plan").innerHTML = html;
+
+  boxes = [...document.querySelectorAll("ul.tasks input")];
+  boxes.forEach(b => b.addEventListener("change", () => {
+    checkState[b.id] = b.checked; saveChecks(); paint();
+  }));
+  paint();
+  renderCalendar();
+
+  const t = document.getElementById("today");
+  if(t) setTimeout(() => t.scrollIntoView({block:"center",behavior:"smooth"}), 400);
+}
+
+let boxes = [];
 const countEl = document.getElementById("count"), fillEl = document.getElementById("fill");
-const SKEY = "tsms-viii-halfyearly-2627";
-
 const subjectCharts = document.getElementById("subjectCharts");
 const sideOverallNum = document.getElementById("sideOverallNum");
 const sideOverallText = document.getElementById("sideOverallText");
 
-subjectCharts.innerHTML = P.map(([k,label]) => `
+subjectCharts.innerHTML = Object.entries(SUBJ_META).map(([k,m]) => `
   <div class="subj-chart" data-k="${k}">
-    <div class="row"><b>${label}</b><span class="pct">0%</span></div>
+    <div class="row"><b>${esc(m.label)}</b><span class="pct">0%</span></div>
     <div class="subj-track"><div class="subj-fill" style="background:var(--${k})"></div></div>
     <div class="row"><span class="cnt">0 of 0</span></div>
   </div>`).join("");
@@ -643,11 +845,10 @@ function paint(){
   const n = boxes.filter(b => b.checked).length;
   countEl.textContent = `${n} of ${boxes.length} done`;
   fillEl.style.width = (boxes.length ? n/boxes.length*100 : 0) + "%";
-
   sideOverallNum.textContent = (boxes.length ? Math.round(n/boxes.length*100) : 0) + "%";
   sideOverallText.textContent = `${n} of ${boxes.length} tasks done overall`;
 
-  P.forEach(([k]) => {
+  Object.keys(SUBJ_META).forEach(k => {
     const items = [...document.querySelectorAll(`ul.tasks li[data-subj="${k}"] input`)];
     const done = items.filter(b => b.checked).length;
     const pct = items.length ? Math.round(done/items.length*100) : 0;
@@ -658,25 +859,168 @@ function paint(){
     chart.querySelector(".subj-fill").style.width = pct + "%";
   });
 }
-function save(){
-  try{ localStorage.setItem(SKEY, JSON.stringify(boxes.map(b => b.checked ? 1 : 0))); }catch(e){}
-}
-function load(){
-  try{
-    const raw = localStorage.getItem(SKEY);
-    const v = raw ? JSON.parse(raw) : null;
-    if(Array.isArray(v)) v.forEach((c,i) => { if(boxes[i]) boxes[i].checked = !!c; });
-  }catch(e){}
-  paint();
-}
-boxes.forEach(b => b.addEventListener("change", () => { paint(); save(); }));
-document.getElementById("reset").addEventListener("click", () => {
-  boxes.forEach(b => b.checked = false); paint(); save();
-});
-load();
 
-const t = document.getElementById("today");
-if(t) setTimeout(() => t.scrollIntoView({block:"center",behavior:"smooth"}), 400);
+/* ================= exam date & difficulty controls ================= */
+const examControls = document.getElementById("examControls");
+const weightControls = document.getElementById("weightControls");
+
+function renderControls(){
+  const exams = getExams();
+  examControls.innerHTML = exams.map(e => `
+    <div class="exam-row">
+      <label title="${esc(e.label)}">${esc(e.label)}</label>
+      <input type="date" data-exam="${e.key}" value="${e.date}">
+      <input type="text" data-exam-dur="${e.key}" value="${esc(e.dur)}">
+    </div>`).join("");
+  examControls.querySelectorAll("[data-exam]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const key = inp.dataset.exam;
+      examOv[key] = Object.assign({}, examOv[key], {date: inp.value});
+      saveExamOv();
+      renderAll();
+    });
+  });
+  examControls.querySelectorAll("[data-exam-dur]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const key = inp.dataset.examDur;
+      examOv[key] = Object.assign({}, examOv[key], {dur: inp.value});
+      saveExamOv();
+      renderAll();
+    });
+  });
+
+  weightControls.innerHTML = Object.entries(SUBJ_META).map(([k,m]) => `
+    <div class="weight-row">
+      <label>${esc(m.label)}</label>
+      <select data-weight="${k}">
+        ${[1,2,3,4,5].map(w => `<option value="${w}"${getWeight(k)===w?" selected":""}>${WEIGHT_LABELS[w]}</option>`).join("")}
+      </select>
+    </div>`).join("");
+  weightControls.querySelectorAll("[data-weight]").forEach(sel => {
+    sel.addEventListener("change", () => {
+      weightOv[sel.dataset.weight] = Number(sel.value);
+      saveWeightOv();
+      renderAll();
+    });
+  });
+}
+renderControls();
+
+document.getElementById("resetEdits").addEventListener("click", () => {
+  if(!confirm("Reset all exam dates and difficulty settings back to the default schedule?")) return;
+  examOv = {}; weightOv = {};
+  saveExamOv(); saveWeightOv();
+  renderControls();
+  renderAll();
+});
+document.getElementById("reset").addEventListener("click", () => {
+  checkState = {}; saveChecks();
+  boxes.forEach(b => b.checked = false);
+  paint(); renderCalendar();
+});
+
+/* ================= calendar view ================= */
+function renderCalendar(){
+  const {allDays, exams, examByDate} = buildSchedule();
+  const cal = document.getElementById("calendarView");
+  const monthsMap = {};
+  allDays.forEach(d => { (monthsMap[d.slice(0,7)] = monthsMap[d.slice(0,7)] || []).push(d); });
+  const monthKeys = Object.keys(monthsMap).sort();
+  cal.innerHTML = "";
+  monthKeys.forEach(mKey => {
+    const [y,m] = mKey.split("-").map(Number);
+    const first = new Date(y, m-1, 1);
+    const startWeekday = first.getDay();
+    const daysInMonth = new Date(y, m, 0).getDate();
+    const monthLabel = first.toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+
+    const monthEl = document.createElement("div");
+    monthEl.className = "cal-month";
+    const title = document.createElement("h3");
+    title.className = "cal-month-title";
+    title.textContent = monthLabel;
+    monthEl.appendChild(title);
+
+    const grid = document.createElement("div");
+    grid.className = "cal-grid";
+    ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(w => {
+      const el = document.createElement("div");
+      el.className = "cal-dow"; el.textContent = w; grid.appendChild(el);
+    });
+    for(let i=0;i<startWeekday;i++){
+      const el = document.createElement("div"); el.className = "cal-cell empty"; grid.appendChild(el);
+    }
+    for(let d=1; d<=daysInMonth; d++){
+      const dIso = `${mKey}-${String(d).padStart(2,"0")}`;
+      const cell = document.createElement("div");
+      cell.className = "cal-cell" + (dIso === TODAY ? " is-today" : "");
+      const num = document.createElement("div");
+      num.className = "cal-daynum" + (dIso === TODAY ? " today" : "");
+      num.textContent = d;
+      cell.appendChild(num);
+
+      if(allDays.includes(dIso)){
+        const examsToday = examByDate[dIso] || [];
+        const holiday = HOLIDAY_MAP[dIso];
+        examsToday.forEach(e => {
+          const pill = document.createElement("div");
+          pill.className = "cal-pill exam"; pill.textContent = e.label; pill.dataset.id = dIso;
+          pill.addEventListener("click", () => jumpToDay(dIso));
+          cell.appendChild(pill);
+        });
+        if(holiday){
+          const pill = document.createElement("div");
+          pill.className = "cal-pill " + holiday.kind; pill.textContent = holiday.lab; pill.dataset.id = dIso;
+          pill.addEventListener("click", () => jumpToDay(dIso));
+          cell.appendChild(pill);
+        }
+        if(!examsToday.length && !holiday){
+          const items = [...document.querySelectorAll(`.day[data-id="${dIso}"] ul.tasks input`)];
+          if(items.length){
+            const done = items.filter(b => b.checked).length;
+            const pill = document.createElement("div");
+            pill.className = "cal-pill study"; pill.textContent = `${done}/${items.length} tasks`; pill.dataset.id = dIso;
+            pill.addEventListener("click", () => jumpToDay(dIso));
+            cell.appendChild(pill);
+          }
+        }
+      }
+      grid.appendChild(cell);
+    }
+    const rem = (7 - ((startWeekday+daysInMonth) % 7)) % 7;
+    for(let i=0;i<rem;i++){
+      const el = document.createElement("div"); el.className = "cal-cell empty"; grid.appendChild(el);
+    }
+    monthEl.appendChild(grid);
+    cal.appendChild(monthEl);
+  });
+}
+function jumpToDay(dIso){
+  switchView("list");
+  const art = document.querySelector(`.day[data-id="${dIso}"]`);
+  if(art){
+    art.scrollIntoView({block:"center",behavior:"smooth"});
+    art.classList.add("flash");
+    setTimeout(() => art.classList.remove("flash"), 1200);
+  }
+}
+
+/* ================= view toggle ================= */
+const VKEY = "tsms-viii-view-2627";
+function switchView(v){
+  document.getElementById("plan").style.display = v === "list" ? "" : "none";
+  document.getElementById("calendarView").style.display = v === "calendar" ? "" : "none";
+  document.getElementById("viewList").classList.toggle("active", v === "list");
+  document.getElementById("viewCal").classList.toggle("active", v === "calendar");
+  try{ localStorage.setItem(VKEY, v); }catch(e){}
+}
+document.getElementById("viewList").addEventListener("click", () => switchView("list"));
+document.getElementById("viewCal").addEventListener("click", () => switchView("calendar"));
+let savedView = "list";
+try{ savedView = localStorage.getItem(VKEY) || "list"; }catch(e){}
+switchView(savedView);
+
+renderAll();
 
 /* ---------- dark mode ---------- */
 const TKEY = "tsms-viii-theme";
