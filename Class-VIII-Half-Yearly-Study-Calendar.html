@@ -1,0 +1,1064 @@
+<!-- Licensed under the MIT License — see LICENSE file -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class VIII — Half Yearly Study Calendar 2026-27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Noto+Sans+Devanagari:wght@400;500&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#F1F4F7;
+    --card:#FFFFFF;
+    --ink:#101A2E;
+    --ink-2:#4C5C77;
+    --ink-3:#8394AB;
+    --rule:#D3DDE7;
+    --rule-soft:#E6ECF2;
+    --red:#C42B2B;
+    --marigold:#DE8F14;
+    --leaf:#2A7A57;
+
+    --maths:#2E5EAA;   --physics:#6F4BC7; --chemistry:#B32D6B;
+    --biology:#1E7A55; --englit:#B04A1E;  --englang:#8C6A2F;
+    --hindi:#A33049;   --hist:#6B4A2F;    --geo:#10707E;
+    --comp:#46536B;    --lang2:#6E7A1E;   --mixed:#4C5C77;
+
+    --holiday-bg:#FAFBFC; --exam-border:#EDC9C9; --check-mark:#fff;
+    --overlay:rgba(16,26,46,.4); --shadow:rgba(16,26,46,.12);
+
+    --display:"Bricolage Grotesque",-apple-system,"Segoe UI",sans-serif;
+    --body:"Spline Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"Spline Sans Mono",ui-monospace,"SF Mono",Menlo,monospace;
+    --deva:"Noto Sans Devanagari","Nirmala UI","Mangal",var(--body);
+  }
+
+  :root[data-theme="dark"]{
+    --paper:#0B0F17; --card:#141B27; --ink:#E7ECF4; --ink-2:#A7B4C8;
+    --ink-3:#71809A; --rule:#28323F; --rule-soft:#1C2531;
+    --red:#E5605A; --marigold:#E8A23B; --leaf:#4FAE81;
+    --maths:#6E9EE8; --physics:#A98BEF; --chemistry:#E86FA0;
+    --biology:#57C793; --englit:#E39A6B; --englang:#C3A05A;
+    --hindi:#E27E92; --hist:#B98E6C; --geo:#4FC2D2;
+    --comp:#9AA7BE; --lang2:#B6C25A; --mixed:#A7B4C8;
+    --holiday-bg:#171F2C; --exam-border:#4A2A32; --check-mark:#0B0F17;
+    --overlay:rgba(0,0,0,.55); --shadow:rgba(0,0,0,.4);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]):not([data-theme="dark"]){
+      --paper:#0B0F17; --card:#141B27; --ink:#E7ECF4; --ink-2:#A7B4C8;
+      --ink-3:#71809A; --rule:#28323F; --rule-soft:#1C2531;
+      --red:#E5605A; --marigold:#E8A23B; --leaf:#4FAE81;
+      --maths:#6E9EE8; --physics:#A98BEF; --chemistry:#E86FA0;
+      --biology:#57C793; --englit:#E39A6B; --englang:#C3A05A;
+      --hindi:#E27E92; --hist:#B98E6C; --geo:#4FC2D2;
+      --comp:#9AA7BE; --lang2:#B6C25A; --mixed:#A7B4C8;
+      --holiday-bg:#171F2C; --exam-border:#4A2A32; --check-mark:#0B0F17;
+      --overlay:rgba(0,0,0,.55); --shadow:rgba(0,0,0,.4);
+    }
+  }
+  body{transition:background-color .2s ease, color .2s ease}
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--body); font-size:15px; line-height:1.5;
+    padding:0 20px 80px;
+  }
+  .wrap{max-width:880px; margin:0 auto}
+
+  /* ---------- masthead ---------- */
+  header{padding:44px 0 0}
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-3);
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  }
+  .eyebrow span:not(:last-child)::after{content:" ·"; color:var(--rule)}
+  h1{
+    font-family:var(--display); font-weight:800; font-size:clamp(38px,8.5vw,68px);
+    line-height:.94; letter-spacing:-.03em; margin:14px 0 0;
+  }
+  h1 em{font-style:normal; display:block; color:var(--ink-3)}
+  .standfirst{
+    margin:16px 0 0; max-width:46em; color:var(--ink-2); font-size:16px;
+  }
+
+  /* ---------- paper ladder (signature) ---------- */
+  .ladder{
+    margin:30px 0 0; border-top:1.5px solid var(--ink); border-bottom:1px solid var(--rule);
+    padding:12px 0 4px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+  }
+  .ladder-head{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-3); margin-bottom:10px;
+  }
+  .rungs{display:flex; gap:0; min-width:640px}
+  .rung{
+    flex:1 1 0; padding:0 8px 10px 0; border-left:1px solid var(--rule-soft);
+    padding-left:8px; position:relative;
+  }
+  .rung:first-child{border-left:0; padding-left:0}
+  .rung b{
+    display:block; font-family:var(--body); font-weight:600; font-size:12.5px;
+    line-height:1.25; letter-spacing:-.01em;
+  }
+  .rung i{
+    display:block; font-family:var(--mono); font-style:normal;
+    font-size:10.5px; color:var(--ink-3); margin-top:3px;
+  }
+  .rung::before{
+    content:""; display:block; width:8px; height:8px; border-radius:50%;
+    border:1.5px solid var(--red); margin-bottom:8px;
+  }
+  .rung.done::before{background:var(--red)}
+  .rung.done b, .rung.done i{color:var(--ink-3)}
+  .rung.done b{text-decoration:line-through; text-decoration-thickness:1px}
+
+  /* ---------- facts + progress ---------- */
+  .strip{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
+    gap:0; margin:22px 0 0; border:1px solid var(--rule); background:var(--card);
+  }
+  .fact{padding:12px 14px; border-right:1px solid var(--rule-soft)}
+  .fact:last-child{border-right:0}
+  .fact dt{
+    font-family:var(--mono); font-size:10px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--ink-3);
+  }
+  .fact dd{margin:4px 0 0; font-weight:500; font-size:14px}
+
+  .meter{
+    display:flex; align-items:center; gap:14px; margin:14px 0 0;
+    font-family:var(--mono); font-size:11.5px; color:var(--ink-2);
+  }
+  .bar{flex:1; height:3px; background:var(--rule); position:relative; overflow:hidden}
+  .bar i{
+    position:absolute; inset:0 auto 0 0; width:0; background:var(--leaf);
+    transition:width .35s ease;
+  }
+  .reset{
+    font:inherit; font-family:var(--mono); color:var(--ink-3); background:none;
+    border:0; border-bottom:1px solid var(--rule); cursor:pointer; padding:0 0 1px;
+  }
+  .reset:hover{color:var(--red); border-color:var(--red)}
+
+  .habit{
+    margin:24px 0 0; padding:14px 16px; background:var(--card);
+    border:1px solid var(--rule); border-left:3px solid var(--marigold);
+  }
+  .habit h3{
+    margin:0 0 6px; font-family:var(--mono); font-size:10.5px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:500;
+  }
+  .habit p{margin:0; font-size:14px; color:var(--ink-2)}
+  .habit p b{color:var(--ink); font-weight:600}
+
+  /* ---------- phases ---------- */
+  .phase{margin:52px 0 0}
+  .phase-head{border-top:1.5px solid var(--ink); padding-top:12px; margin-bottom:6px}
+  .phase-head h2{
+    font-family:var(--display); font-weight:600; font-size:clamp(22px,4vw,30px);
+    letter-spacing:-.02em; margin:0; line-height:1.1;
+  }
+  .phase-head p{
+    margin:6px 0 0; color:var(--ink-2); font-size:14px; max-width:44em;
+  }
+  .phase-head .range{
+    font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-3);
+  }
+
+  /* ---------- the spine ---------- */
+  .days{position:relative; padding-left:46px; margin-top:22px}
+  .days::before{
+    content:""; position:absolute; left:13px; top:14px; bottom:14px;
+    width:1.5px; background:var(--rule);
+  }
+
+  .day{
+    position:relative; background:var(--card); border:1px solid var(--rule);
+    padding:14px 16px 15px; margin-bottom:10px;
+  }
+  .day::before{ /* spine marker */
+    content:""; position:absolute; left:-39px; top:20px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--paper); border:1.5px solid var(--rule);
+  }
+  .day.exam::before{
+    background:var(--red); border-color:var(--red);
+    width:13px; height:13px; left:-41px; top:18px;
+    box-shadow:0 0 0 3px var(--paper), 0 0 0 4.5px var(--red);
+  }
+  .day.holiday::before{border-color:var(--marigold); background:var(--paper)}
+  .day.leave::before{background:var(--leaf); border-color:var(--leaf)}
+
+  .day.exam{border-color:var(--exam-border); border-left:3px solid var(--red); padding-left:14px}
+  .day.holiday, .day.leave{background:var(--holiday-bg)}
+  .day.today{box-shadow:0 0 0 2px var(--ink)}
+
+  .day-top{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+  .date{
+    font-family:var(--mono); font-weight:600; font-size:12.5px;
+    letter-spacing:.04em; text-transform:uppercase; white-space:nowrap;
+  }
+  .date s{color:var(--ink-3); text-decoration:none; font-weight:400}
+  .badge{
+    font-family:var(--mono); font-size:10px; letter-spacing:.13em;
+    text-transform:uppercase; padding:2px 7px; border:1px solid currentColor;
+    white-space:nowrap;
+  }
+  .badge.exam{color:var(--red)}
+  .badge.holiday{color:var(--marigold)}
+  .badge.leave{color:var(--leaf)}
+  .badge.today{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .note{font-size:13px; color:var(--ink-3); font-family:var(--mono)}
+
+  .paper{
+    margin:9px 0 0; font-family:var(--display); font-weight:600;
+    font-size:clamp(19px,3.6vw,25px); letter-spacing:-.02em; line-height:1.15;
+  }
+  .paper span{
+    font-family:var(--mono); font-size:11px; font-weight:400; color:var(--ink-3);
+    letter-spacing:.06em; margin-left:9px; white-space:nowrap;
+  }
+  .after{
+    margin:12px 0 6px; font-family:var(--mono); font-size:10px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--ink-3);
+  }
+
+  ul.tasks{list-style:none; margin:10px 0 0; padding:0}
+  ul.tasks li{
+    display:flex; gap:10px; align-items:flex-start; padding:5px 0;
+    border-top:1px solid var(--rule-soft);
+  }
+  ul.tasks li:first-child{border-top:0}
+  ul.tasks input{
+    appearance:none; -webkit-appearance:none; flex:0 0 auto;
+    width:15px; height:15px; margin:4px 0 0; border:1.5px solid var(--rule);
+    background:var(--card); cursor:pointer; border-radius:2px; position:relative;
+  }
+  ul.tasks input:hover{border-color:var(--ink-3)}
+  ul.tasks input:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+  ul.tasks input:checked{background:var(--leaf); border-color:var(--leaf)}
+  ul.tasks input:checked::after{
+    content:""; position:absolute; left:4px; top:.5px; width:4px; height:8.5px;
+    border:solid var(--check-mark); border-width:0 1.8px 1.8px 0; transform:rotate(42deg);
+  }
+  ul.tasks label{cursor:pointer; font-size:14.5px; line-height:1.45}
+  ul.tasks input:checked + label{color:var(--ink-3); text-decoration:line-through;
+    text-decoration-color:var(--rule)}
+  .tag{
+    font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    font-weight:500; color:var(--k,var(--mixed)); margin-right:7px; white-space:nowrap;
+  }
+  .deva{font-family:var(--deva); font-size:14px}
+
+  .finish{
+    margin:34px 0 0; padding:26px 22px; border:1.5px solid var(--ink); background:var(--card);
+  }
+  .finish h2{
+    font-family:var(--display); font-weight:800; font-size:clamp(24px,5vw,36px);
+    letter-spacing:-.03em; margin:0; line-height:1;
+  }
+  .finish p{margin:10px 0 0; color:var(--ink-2); max-width:40em}
+
+  footer{
+    margin:44px 0 0; padding-top:14px; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:11px; color:var(--ink-3); line-height:1.7;
+  }
+
+  /* ---------- top controls (theme + progress) ---------- */
+  .controls{
+    position:fixed; top:16px; right:16px; z-index:60;
+    display:flex; gap:8px;
+  }
+  .ctrl-btn{
+    width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+    background:var(--card); border:1px solid var(--rule); border-radius:50%;
+    cursor:pointer; color:var(--ink); box-shadow:0 1px 3px var(--shadow);
+    font-size:16px; line-height:1; padding:0; transition:border-color .15s ease, transform .15s ease;
+  }
+  .ctrl-btn:hover{border-color:var(--ink-3)}
+  .ctrl-btn:active{transform:scale(.94)}
+
+  /* ---------- progress sidebar ---------- */
+  .side-overlay{
+    position:fixed; inset:0; background:var(--overlay); z-index:65;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .side-overlay.open{opacity:1; pointer-events:auto}
+
+  .sidebar{
+    position:fixed; top:0; right:0; bottom:0; width:320px; max-width:88vw;
+    background:var(--card); border-left:1px solid var(--rule); z-index:70;
+    transform:translateX(100%); transition:transform .28s ease;
+    overflow-y:auto; padding:20px 20px 40px; box-shadow:-2px 0 16px var(--shadow);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-head{
+    display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+    border-bottom:1.5px solid var(--ink); padding-bottom:10px; margin-bottom:4px;
+  }
+  .sidebar-head h2{
+    font-family:var(--display); font-weight:800; font-size:19px; margin:0; letter-spacing:-.02em;
+  }
+  .sidebar-close{
+    font:inherit; font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-3); background:none; border:0; cursor:pointer; padding:4px;
+  }
+  .sidebar-close:hover{color:var(--red)}
+  .sidebar-overall{
+    margin:14px 0 20px; font-family:var(--mono); font-size:11.5px; color:var(--ink-2);
+  }
+  .sidebar-overall .bignum{
+    font-family:var(--display); font-weight:800; font-size:34px; color:var(--ink);
+    letter-spacing:-.02em; display:block; margin-bottom:2px;
+  }
+  .subj-chart{margin-bottom:14px}
+  .subj-chart .row{
+    display:flex; align-items:baseline; justify-content:space-between; gap:8px;
+    font-family:var(--mono); font-size:11px; margin-bottom:5px;
+  }
+  .subj-chart .row b{
+    font-family:var(--body); font-weight:600; font-size:12.5px; color:var(--ink);
+  }
+  .subj-chart .row span{color:var(--ink-3); white-space:nowrap}
+  .subj-track{height:7px; background:var(--rule-soft); border-radius:4px; overflow:hidden}
+  .subj-fill{height:100%; border-radius:4px; width:0; transition:width .4s ease}
+
+  .side-tab{
+    position:fixed; top:64px; right:16px; z-index:60;
+    display:flex; align-items:center; gap:7px;
+    background:var(--card); border:1px solid var(--rule); border-radius:20px;
+    padding:8px 14px 8px 12px; cursor:pointer; box-shadow:0 1px 3px var(--shadow);
+    font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .side-tab:hover{border-color:var(--ink-3); color:var(--ink)}
+  .side-tab .dot{width:7px; height:7px; border-radius:50%; background:var(--leaf); flex:0 0 auto}
+
+  @media (max-width:560px){
+    .controls{top:10px; right:10px}
+    .side-tab{top:56px; right:10px; padding:7px 12px 7px 10px}
+    .sidebar{padding:16px 16px 32px}
+  }
+  @media print{
+    .controls, .side-tab, .sidebar, .side-overlay, .view-toggle{display:none}
+  }
+
+  /* ---------- view toggle (list / calendar) ---------- */
+  .view-toggle{
+    display:inline-flex; margin:16px 0 0; border:1px solid var(--rule); border-radius:20px;
+    padding:2px; background:var(--card); width:max-content;
+  }
+  .view-btn{
+    font:inherit; font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    padding:6px 14px; border:0; border-radius:18px; background:none; color:var(--ink-3); cursor:pointer;
+  }
+  .view-btn.active{background:var(--ink); color:var(--paper)}
+
+  /* ---------- schedule controls (sidebar) ---------- */
+  .side-section{margin-bottom:22px}
+  .side-section h3{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+    color:var(--ink-3); margin:0 0 10px; font-weight:500; border-top:1px solid var(--rule); padding-top:14px;
+  }
+  .exam-row{
+    display:flex; align-items:center; gap:6px; margin-bottom:7px; font-size:12px;
+  }
+  .exam-row label{flex:1 1 auto; color:var(--ink); font-weight:500; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .exam-row input[type="date"]{
+    font:inherit; font-family:var(--mono); font-size:10.5px; background:var(--card); color:var(--ink);
+    border:1px solid var(--rule); border-radius:3px; padding:2px 3px; width:118px; flex:0 0 auto;
+  }
+  .exam-row input[type="text"]{
+    font:inherit; font-family:var(--mono); font-size:10.5px; background:var(--card); color:var(--ink);
+    border:1px solid var(--rule); border-radius:3px; padding:2px 3px; width:64px; flex:0 0 auto;
+  }
+  .weight-row{
+    display:flex; align-items:center; gap:6px; margin-bottom:7px; font-size:12px;
+  }
+  .weight-row label{flex:1 1 auto; color:var(--ink); font-weight:500}
+  .weight-row select{
+    font:inherit; font-family:var(--mono); font-size:10.5px; background:var(--card); color:var(--ink);
+    border:1px solid var(--rule); border-radius:3px; padding:2px 3px; flex:0 0 auto;
+  }
+
+  /* ---------- calendar view ---------- */
+  #calendarView{margin-top:22px}
+  .cal-month{margin-bottom:34px}
+  .cal-month-title{
+    font-family:var(--display); font-weight:600; font-size:20px; letter-spacing:-.02em;
+    margin:0 0 10px; border-top:1.5px solid var(--ink); padding-top:10px;
+  }
+  .cal-grid{
+    display:grid; grid-template-columns:repeat(7,1fr); gap:1px;
+    background:var(--rule); border:1px solid var(--rule);
+  }
+  .cal-dow{
+    background:var(--card); padding:6px 0; text-align:center;
+    font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .cal-cell{
+    background:var(--card); min-height:76px; padding:6px; position:relative;
+  }
+  .cal-cell.empty{background:var(--paper)}
+  .cal-cell.is-today{box-shadow:inset 0 0 0 2px var(--ink)}
+  .cal-daynum{
+    font-family:var(--mono); font-size:11px; color:var(--ink-3); margin-bottom:4px;
+  }
+  .cal-daynum.today{color:var(--ink); font-weight:700}
+  .cal-pill{
+    font-family:var(--mono); font-size:10px; letter-spacing:.02em; line-height:1.3;
+    padding:3px 5px; border-radius:3px; cursor:pointer; overflow:hidden;
+    text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+    margin-bottom:3px;
+  }
+  .cal-pill:last-child{margin-bottom:0}
+  .cal-pill.exam{background:var(--red); color:#fff}
+  .cal-pill.holiday{background:var(--marigold); color:#fff}
+  .cal-pill.leave{background:var(--leaf); color:#fff}
+  .cal-pill.study{background:var(--rule-soft); color:var(--ink-2)}
+  .day.flash{animation:flashHi 1.2s ease}
+  @keyframes flashHi{0%,100%{background:var(--card)}30%{background:var(--rule-soft)}}
+
+  @media (max-width:560px){
+    .cal-cell{min-height:58px; padding:4px}
+    .cal-pill{font-size:9px; -webkit-line-clamp:2}
+  }
+
+  @media (max-width:560px){
+    body{padding:0 14px 60px}
+    .days{padding-left:32px}
+    .days::before{left:7px}
+    .day::before{left:-30px}
+    .day.exam::before{left:-32px}
+    .fact{border-right:0; border-bottom:1px solid var(--rule-soft)}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important}}
+
+  @media print{
+    body{background:#fff; padding:0; font-size:11px}
+    .meter,.reset,.ladder{display:none}
+    .day{break-inside:avoid; page-break-inside:avoid; margin-bottom:6px}
+    .phase{break-before:page; margin-top:20px}
+    .phase:first-of-type{break-before:auto}
+    ul.tasks input{border-color:#999}
+  }
+</style>
+
+<div class="controls">
+  <button class="ctrl-btn" id="themeToggle" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+</div>
+
+<button class="side-tab" id="sideTab" type="button" aria-label="Open subject progress">
+  <span class="dot"></span>Progress
+</button>
+
+<div class="side-overlay" id="sideOverlay"></div>
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sidebar-head">
+    <h2>Study planner</h2>
+    <button class="sidebar-close" id="sideClose" type="button">Close ✕</button>
+  </div>
+  <div class="sidebar-overall">
+    <span class="bignum" id="sideOverallNum">0%</span>
+    <span id="sideOverallText">0 of 0 tasks done overall</span>
+  </div>
+
+  <div class="side-section">
+    <h3>Exam dates &amp; timings</h3>
+    <div id="examControls"></div>
+  </div>
+  <div class="side-section">
+    <h3>Difficulty (sets how many days each subject gets)</h3>
+    <div id="weightControls"></div>
+  </div>
+
+  <div class="side-section">
+    <h3>Progress by subject</h3>
+    <div id="subjectCharts"></div>
+  </div>
+</aside>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow"><span>The Shriram Millennium School, Noida</span><span>Class VIII</span><span>2026&ndash;27</span></p>
+  <h1>Half Yearly<em>run-up</em></h1>
+  <p class="standfirst">Set your exam dates and how hard each subject is for you in the <b>Progress</b> panel
+    &mdash; the plan below rebuilds itself automatically: harder subjects get more days, and everything finishes
+    with a clear run-up before its own paper. Tick things off as you go.</p>
+
+  <div class="ladder">
+    <p class="ladder-head">Your papers, in order</p>
+    <div class="rungs" id="rungs"></div>
+  </div>
+
+  <dl class="strip">
+    <div class="fact"><dt>First paper</dt><dd id="factFirst">&ndash;</dd></div>
+    <div class="fact"><dt>Last paper</dt><dd id="factLast">&ndash;</dd></div>
+    <div class="fact"><dt>Papers</dt><dd id="factCount">&ndash;</dd></div>
+    <div class="fact"><dt>Plan runs</dt><dd id="factSpan">&ndash;</dd></div>
+  </dl>
+
+  <div class="meter">
+    <span id="count">0 of 0 done</span>
+    <span class="bar"><i id="fill"></i></span>
+    <button class="reset" id="reset" type="button">Clear all ticks</button>
+    <button class="reset" id="resetEdits" type="button">Reset exam dates &amp; difficulty</button>
+  </div>
+
+  <div class="view-toggle">
+    <button class="view-btn" id="viewList" type="button" data-view="list">List</button>
+    <button class="view-btn" id="viewCal" type="button" data-view="calendar">Calendar</button>
+  </div>
+
+  <div class="habit">
+    <h3>Every day, on top of the list</h3>
+    <p><b>20 min word drill</b> &mdash; rotate Hindi पर्यायवाची / विलोम / मुहावरे and your 2nd-language vocabulary,
+       so neither language has to be crammed at the end. <b>15 min sums</b> &mdash; five Maths questions from any
+       finished chapter. <b>Lights out by 10 pm</b> &mdash; an 8:00 am reporting time is unforgiving.</p>
+  </div>
+</header>
+
+<main id="plan"></main>
+<div id="calendarView" style="display:none"></div>
+
+<footer>
+  Built from Circular TSMSN/CIRC/26-27/127 (23 July 2026) and the Class VIII Half Yearly syllabus.<br>
+  Holidays shown as per the date sheet &mdash; Milad-Un-Nabi 26 Aug, Raksha Bandhan 28 Aug, Teacher&rsquo;s Day 3 Sept (half day), Janmashtami 4 Sept.<br>
+  Regular school resumes Tuesday 15 September 2026.
+</footer>
+</div>
+
+<script>
+/* ================= fixed reference data ================= */
+const GLOBAL_START = "2026-08-06";
+
+const HOLIDAYS = [
+  {d:"2026-08-15", lab:"Independence Day", kind:"holiday", cap:4},
+  {d:"2026-08-26", lab:"Milad-Un-Nabi", kind:"holiday", cap:4},
+  {d:"2026-08-28", lab:"Raksha Bandhan", kind:"holiday", cap:4},
+  {d:"2026-09-03", lab:"Teacher's Day — half day", kind:"holiday", cap:3},
+  {d:"2026-09-04", lab:"Janmashtami", kind:"holiday", cap:4},
+  {d:"2026-09-09", lab:"Study Leave", kind:"leave", cap:4}
+];
+const HOLIDAY_MAP = Object.fromEntries(HOLIDAYS.map(h => [h.d, h]));
+
+const SUBJ_META = {
+  maths:{label:"Maths", weight:5}, physics:{label:"Physics", weight:5}, chemistry:{label:"Chemistry", weight:5},
+  hindi:{label:"Hindi", weight:4},
+  biology:{label:"Biology", weight:3}, hist:{label:"Hist & Civics", weight:3},
+  englit:{label:"Eng Lit", weight:2}, englang:{label:"Eng Lang", weight:2},
+  geo:{label:"Geography", weight:1}, comp:{label:"Computer", weight:1}, lang2:{label:"2nd Lang", weight:1}
+};
+const WEIGHT_LABELS = {1:"Easy", 2:"Light", 3:"Medium", 4:"Hard", 5:"Very hard"};
+const PACE = {5:1, 4:1.2, 3:1.6, 2:2.2, 1:3};
+
+const EXAMS_DEFAULT = [
+  {key:"comp_practical", subj:"comp", label:"Computer Practical", date:"2026-08-21", dur:"Practical"},
+  {key:"hist", subj:"hist", label:"History & Civics", date:"2026-08-24", dur:"2 hrs"},
+  {key:"englit", subj:"englit", label:"English Literature", date:"2026-08-25", dur:"2 hrs"},
+  {key:"hindi", subj:"hindi", label:"Hindi", date:"2026-08-27", dur:"3 hrs"},
+  {key:"chemistry", subj:"chemistry", label:"Chemistry", date:"2026-08-31", dur:"2 hrs"},
+  {key:"comp_theory", subj:"comp", label:"Computer", date:"2026-09-01", dur:"2 hrs"},
+  {key:"physics", subj:"physics", label:"Physics", date:"2026-09-02", dur:"2 hrs"},
+  {key:"maths", subj:"maths", label:"Mathematics", date:"2026-09-07", dur:"3 hrs"},
+  {key:"biology", subj:"biology", label:"Biology", date:"2026-09-08", dur:"2 hrs"},
+  {key:"geo", subj:"geo", label:"Geography", date:"2026-09-10", dur:"2 hrs"},
+  {key:"englang", subj:"englang", label:"English Language", date:"2026-09-11", dur:"2 hrs"},
+  {key:"lang2", subj:"lang2", label:"2nd Language — French / Sanskrit / Spanish", date:"2026-09-14", dur:"2 hrs"}
+];
+
+const CONTENT = {
+  comp_practical: [
+    "Ch 1 Cell Referencing and Ch 2 Functions — on the laptop, not on paper",
+    "Ch 4 Algorithm and Flowchart, Ch 7 Programming in Python — type and run every example"
+  ],
+  comp_theory: ["Ch 10 Introduction to AI, then drill Excel functions and Python syntax"],
+  hist: [
+    "History Ch 1 — The Beginning of the Modern World",
+    "Civics Ch 16 — The Union Legislature",
+    "Civics Ch 17 — The Union Executive",
+    "Civics Ch 18 — The Judiciary",
+    "History Ch 5 — Decline of the Mughal Empire"
+  ],
+  englit: [
+    "Prose: March — read it, make character and theme notes",
+    "Prose: Michelangelo",
+    "Prose: The Grandfather and the Python",
+    "Poetry: The Hero and I Wandered Lonely as a Cloud"
+  ],
+  hindi: [
+    "गुंजन — मेरा नया बचपन, आज की कुण्डलियाँ",
+    "गुंजन — अनोखा बदला, लाख की चूड़ियाँ, रथचक्र",
+    "व्याकरण — पर्यायवाची, विलोम, अनेक शब्दों के लिए एक शब्द (1–30), मुहावरे व लोकोक्ति (1–15)",
+    "वाक्य परिवर्तन — अशुद्धि संशोधन, काल, लिंग, वचन",
+    "रचनात्मक लेखन — निबंध, कहानी/आत्मकथा या चित्र वर्णन, औपचारिक पत्र, दो अपठित गद्यांश"
+  ],
+  chemistry: [
+    "Ch 4 Atomic Structure — practise electronic configurations",
+    "Ch 5 Language of Chemistry — write out 30 formulae from valency",
+    "Ch 6 Chemical Reactions — balance 20 equations"
+  ],
+  physics: [
+    "Ch 2 Physical Quantities and Measurement — units, and density numericals",
+    "Ch 3 Force and Pressure — thrust and pressure numericals",
+    "Ch 5 Light Energy, up to Early Sunrise and Sunset — ray diagrams",
+    "Ch 7 Sound — whole chapter, including numericals"
+  ],
+  maths: [
+    "Ch 1 Rational Numbers and Ch 2 Exponents — solve the exercises, don't just read them",
+    "Ch 3 Squares and Square Roots, Ch 4 Cubes and Cube Roots",
+    "Ch 11 Algebraic Expressions and Ch 12 Identities",
+    "Ch 16 Understanding Shapes and Ch 17 Special Types of Quadrilaterals",
+    "Ch 24 Data Handling and Ch 25 Probability"
+  ],
+  biology: [
+    "Ch 1 Transport in Plants — draw root hair and transpiration diagrams",
+    "Ch 2 Reproduction in Plants — pollination and fertilisation diagrams",
+    "Ch 3 (pages 29–30) Asexual Reproduction in Animals and Ch 4 Ecosystems"
+  ],
+  geo: [
+    "Ch 1 Representation of Geographical Features — scale and contours",
+    "Ch 4 Urbanisation — Causes and Effects",
+    "Ch 5 Disasters — Natural and Human Made",
+    "Ch 6 Asia: Land (physical features only) and three blank maps of Asia"
+  ],
+  englang: [
+    "One descriptive essay, written in 40 minutes flat",
+    "One informal letter and one notice",
+    "Story writing and a narrative essay, both timed",
+    "Picture composition and one e-mail",
+    "Grammar — verb forms, prepositions, transformation of sentences"
+  ],
+  lang2: [
+    "Grammar block 1 — French: articles & verbs · Sanskrit: धातुरूप, शब्दरूप · Spanish: verbos, comparativos",
+    "Vocabulary and comprehension",
+    "Dialogue, paragraph and translation practice"
+  ]
+};
+
+/* ================= persisted overrides ================= */
+const EOKEY = "tsms-viii-exam-overrides-2627";
+const WOKEY = "tsms-viii-weight-overrides-2627";
+const COKEY = "tsms-viii-checks-2627";
+
+let examOv = {}, weightOv = {}, checkState = {};
+try{ examOv = JSON.parse(localStorage.getItem(EOKEY)) || {}; }catch(e){ examOv = {}; }
+try{ weightOv = JSON.parse(localStorage.getItem(WOKEY)) || {}; }catch(e){ weightOv = {}; }
+try{ checkState = JSON.parse(localStorage.getItem(COKEY)) || {}; }catch(e){ checkState = {}; }
+
+function saveExamOv(){ try{ localStorage.setItem(EOKEY, JSON.stringify(examOv)); }catch(e){} }
+function saveWeightOv(){ try{ localStorage.setItem(WOKEY, JSON.stringify(weightOv)); }catch(e){} }
+function saveChecks(){ try{ localStorage.setItem(COKEY, JSON.stringify(checkState)); }catch(e){} }
+
+function getExams(){
+  return EXAMS_DEFAULT.map(e => Object.assign({}, e, examOv[e.key]))
+    .sort((a,b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+}
+function getWeight(subj){ return weightOv[subj] != null ? weightOv[subj] : SUBJ_META[subj].weight; }
+
+const iso = d => d.toISOString().slice(0,10);
+const TODAY = iso(new Date());
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function fmtShort(dstr){
+  const d = new Date(dstr+"T00:00:00");
+  const wk = d.toLocaleDateString("en-GB",{weekday:"short"});
+  const mon = d.toLocaleDateString("en-GB",{month:"short"});
+  return `${wk} ${d.getDate()} ${mon}`;
+}
+
+/* ================= the auto-scheduler ================= */
+function buildSchedule(){
+  const exams = getExams();
+  const start = GLOBAL_START, end = exams[exams.length-1].date;
+  const allDays = [];
+  for(let d=new Date(start+"T00:00:00"); iso(d) <= end; d.setDate(d.getDate()+1)) allDays.push(iso(d));
+
+  const examByDate = {};
+  exams.forEach(e => { (examByDate[e.date] = examByDate[e.date] || []).push(e); });
+  const examIndexByKey = {};
+  exams.forEach(e => { examIndexByKey[e.key] = allDays.indexOf(e.date); });
+
+  function dayCap(dstr){
+    if(examByDate[dstr]) return 1;
+    if(HOLIDAY_MAP[dstr]) return HOLIDAY_MAP[dstr].cap;
+    const dow = new Date(dstr+"T00:00:00").getDay();
+    return (dow === 0 || dow === 6) ? 4 : 2;
+  }
+
+  const perExamItems = {};
+  exams.forEach(e => {
+    const content = CONTENT[e.key] || [];
+    const revision = [];
+    if(content.length) revision.push("Full revision — quick pass over everything, then a one-page summary sheet");
+    if(e.dur !== "Practical") revision.push("One timed practice paper (or past questions), then fix every mistake");
+    perExamItems[e.key] = content.concat(revision);
+  });
+
+  const daySlots = {};
+  allDays.forEach(d => daySlots[d] = []);
+
+  exams.forEach(e => {
+    const items = perExamItems[e.key];
+    if(!items.length) return;
+    const pace = PACE[getWeight(e.subj)] || 1.6;
+    const neededDays = Math.max(1, Math.ceil(items.length / pace));
+    const examIdx = examIndexByKey[e.key];
+    const winEnd = examIdx - 1;
+    let winStart = Math.max(0, winEnd - neededDays + 1);
+    const winDays = [];
+    for(let i=winStart; i<=winEnd; i++) if(i >= 0) winDays.push(allDays[i]);
+    if(!winDays.length) winDays.push(allDays[Math.max(0, examIdx-1)] || allDays[0]);
+    items.forEach((text, i) => {
+      const pos = Math.min(winDays.length-1, Math.floor(i * winDays.length / items.length));
+      daySlots[winDays[pos]].push({examKey:e.key, subj:e.subj, itemIdx:i, text});
+    });
+  });
+
+  allDays.forEach((d,i) => {
+    const cap = dayCap(d);
+    let guard = 0;
+    while(daySlots[d].length > cap && guard++ < 50){
+      const item = daySlots[d].pop();
+      let placed = false;
+      const maxIdx = examIndexByKey[item.examKey] - 1;
+      for(let radius=1; radius<allDays.length && !placed; radius++){
+        const earlier = i - radius;
+        if(earlier >= 0 && daySlots[allDays[earlier]].length < dayCap(allDays[earlier])){
+          daySlots[allDays[earlier]].push(item); placed = true; break;
+        }
+        const later = i + radius;
+        if(later <= maxIdx && later < allDays.length && daySlots[allDays[later]].length < dayCap(allDays[later])){
+          daySlots[allDays[later]].push(item); placed = true; break;
+        }
+      }
+      if(!placed){ daySlots[d].push(item); break; }
+    }
+  });
+
+  return {allDays, daySlots, exams, examByDate};
+}
+
+/* ================= render ================= */
+function renderAll(){
+  const {allDays, daySlots, exams, examByDate} = buildSchedule();
+  const firstExamDate = exams[0].date, lastExamDate = exams[exams.length-1].date;
+
+  document.getElementById("rungs").innerHTML = exams.map(e =>
+    `<div class="rung${e.date < TODAY ? " done":""}"><b>${esc(e.label)}</b><i>${fmtShort(e.date)}</i></div>`).join("");
+  document.getElementById("factFirst").textContent = `${fmtShort(firstExamDate)} — ${exams[0].label}`;
+  document.getElementById("factLast").textContent = `${fmtShort(lastExamDate)} — ${exams[exams.length-1].label}`;
+  document.getElementById("factCount").textContent = exams.length;
+  document.getElementById("factSpan").textContent = `${fmtShort(GLOBAL_START)} – ${fmtShort(lastExamDate)}`;
+
+  let html = "", phase = 0;
+  allDays.forEach(d => {
+    const newPhase = d < firstExamDate ? 1 : 2;
+    if(newPhase !== phase){
+      if(phase) html += `</div></section>`;
+      if(newPhase === 1){
+        const n = allDays.filter(x => x < firstExamDate).length;
+        html += `<section class="phase"><div class="phase-head"><p class="range">${fmtShort(GLOBAL_START)} &ndash; ${fmtShort(firstExamDate)}</p>`+
+          `<h2>Phase one &mdash; the first pass</h2>`+
+          `<p>${n} days to touch every subject once before the first paper, weighted by difficulty so the hardest subjects get the most runway.</p>`+
+          `</div><div class="days">`;
+      } else {
+        html += `<section class="phase"><div class="phase-head"><p class="range">${fmtShort(firstExamDate)} &ndash; ${fmtShort(lastExamDate)}</p>`+
+          `<h2>Phase two &mdash; the exam window</h2>`+
+          `<p>${exams.length} papers from here. Each day still carries prep for whichever paper is soonest.</p>`+
+          `</div><div class="days">`;
+      }
+      phase = newPhase;
+    }
+
+    const examsToday = examByDate[d] || [];
+    const holiday = HOLIDAY_MAP[d];
+    const isToday = d === TODAY;
+    const kind = examsToday.length ? "exam" : (holiday ? holiday.kind : "study");
+    const dow = new Date(d+"T00:00:00").getDay();
+
+    const badges = [];
+    if(isToday) badges.push(`<span class="badge today">Today</span>`);
+    examsToday.forEach(() => badges.push(`<span class="badge exam">Paper</span>`));
+    if(holiday) badges.push(`<span class="badge ${holiday.kind}">${esc(holiday.lab)}</span>`);
+
+    const note = examsToday.length ? "" : (holiday ? "" : ((dow === 0 || dow === 6) ? "Weekend" : "School day"));
+
+    html += `<article class="day ${kind}${isToday?" today":""}" data-id="${d}"${isToday?' id="today"':""}>`+
+      `<div class="day-top"><span class="date">${fmtShort(d)}</span>${badges.join("")}`+
+      (note ? `<span class="note">${note}</span>` : "")+
+      `</div>`;
+
+    examsToday.forEach(e => {
+      html += `<p class="paper">${esc(e.label)}<span>${esc(e.dur)}</span></p>`;
+    });
+
+    const items = daySlots[d];
+    if(items.length){
+      if(examsToday.length) html += `<p class="after">After the paper &mdash; next up</p>`;
+      html += `<ul class="tasks">` + items.map(it => {
+        const cid = it.examKey + "__" + it.itemIdx;
+        const checked = checkState[cid] ? " checked" : "";
+        return `<li data-subj="${it.subj}" data-cid="${cid}"><input type="checkbox" id="${cid}"${checked}><label for="${cid}">`+
+          `<span class="tag" style="--k:var(--${it.subj})">${esc(SUBJ_META[it.subj].label)}</span>`+
+          `<span class="${/[ऀ-ॿ]/.test(it.text)?"deva":""}">${esc(it.text)}</span></label></li>`;
+      }).join("") + `</ul>`;
+    } else if(examsToday.length){
+      html += `<p class="note" style="margin-top:10px">Nothing after this one. That is the lot.</p>`;
+    }
+    html += `</article>`;
+  });
+  html += `</div></section><div class="finish"><h2>That&rsquo;s all ${exams.length}.</h2>`+
+    `<p>Move any exam date or difficulty in the Progress panel any time and this plan rebuilds itself around it.</p></div>`;
+
+  document.getElementById("plan").innerHTML = html;
+
+  boxes = [...document.querySelectorAll("ul.tasks input")];
+  boxes.forEach(b => b.addEventListener("change", () => {
+    checkState[b.id] = b.checked; saveChecks(); paint();
+  }));
+  paint();
+  renderCalendar();
+
+  const t = document.getElementById("today");
+  if(t) setTimeout(() => t.scrollIntoView({block:"center",behavior:"smooth"}), 400);
+}
+
+let boxes = [];
+const countEl = document.getElementById("count"), fillEl = document.getElementById("fill");
+const subjectCharts = document.getElementById("subjectCharts");
+const sideOverallNum = document.getElementById("sideOverallNum");
+const sideOverallText = document.getElementById("sideOverallText");
+
+subjectCharts.innerHTML = Object.entries(SUBJ_META).map(([k,m]) => `
+  <div class="subj-chart" data-k="${k}">
+    <div class="row"><b>${esc(m.label)}</b><span class="pct">0%</span></div>
+    <div class="subj-track"><div class="subj-fill" style="background:var(--${k})"></div></div>
+    <div class="row"><span class="cnt">0 of 0</span></div>
+  </div>`).join("");
+
+function paint(){
+  const n = boxes.filter(b => b.checked).length;
+  countEl.textContent = `${n} of ${boxes.length} done`;
+  fillEl.style.width = (boxes.length ? n/boxes.length*100 : 0) + "%";
+  sideOverallNum.textContent = (boxes.length ? Math.round(n/boxes.length*100) : 0) + "%";
+  sideOverallText.textContent = `${n} of ${boxes.length} tasks done overall`;
+
+  Object.keys(SUBJ_META).forEach(k => {
+    const items = [...document.querySelectorAll(`ul.tasks li[data-subj="${k}"] input`)];
+    const done = items.filter(b => b.checked).length;
+    const pct = items.length ? Math.round(done/items.length*100) : 0;
+    const chart = subjectCharts.querySelector(`.subj-chart[data-k="${k}"]`);
+    if(!chart) return;
+    chart.querySelector(".pct").textContent = pct + "%";
+    chart.querySelector(".cnt").textContent = `${done} of ${items.length}`;
+    chart.querySelector(".subj-fill").style.width = pct + "%";
+  });
+}
+
+/* ================= exam date & difficulty controls ================= */
+const examControls = document.getElementById("examControls");
+const weightControls = document.getElementById("weightControls");
+
+function renderControls(){
+  const exams = getExams();
+  examControls.innerHTML = exams.map(e => `
+    <div class="exam-row">
+      <label title="${esc(e.label)}">${esc(e.label)}</label>
+      <input type="date" data-exam="${e.key}" value="${e.date}">
+      <input type="text" data-exam-dur="${e.key}" value="${esc(e.dur)}">
+    </div>`).join("");
+  examControls.querySelectorAll("[data-exam]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const key = inp.dataset.exam;
+      examOv[key] = Object.assign({}, examOv[key], {date: inp.value});
+      saveExamOv();
+      renderAll();
+    });
+  });
+  examControls.querySelectorAll("[data-exam-dur]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const key = inp.dataset.examDur;
+      examOv[key] = Object.assign({}, examOv[key], {dur: inp.value});
+      saveExamOv();
+      renderAll();
+    });
+  });
+
+  weightControls.innerHTML = Object.entries(SUBJ_META).map(([k,m]) => `
+    <div class="weight-row">
+      <label>${esc(m.label)}</label>
+      <select data-weight="${k}">
+        ${[1,2,3,4,5].map(w => `<option value="${w}"${getWeight(k)===w?" selected":""}>${WEIGHT_LABELS[w]}</option>`).join("")}
+      </select>
+    </div>`).join("");
+  weightControls.querySelectorAll("[data-weight]").forEach(sel => {
+    sel.addEventListener("change", () => {
+      weightOv[sel.dataset.weight] = Number(sel.value);
+      saveWeightOv();
+      renderAll();
+    });
+  });
+}
+renderControls();
+
+document.getElementById("resetEdits").addEventListener("click", () => {
+  if(!confirm("Reset all exam dates and difficulty settings back to the default schedule?")) return;
+  examOv = {}; weightOv = {};
+  saveExamOv(); saveWeightOv();
+  renderControls();
+  renderAll();
+});
+document.getElementById("reset").addEventListener("click", () => {
+  checkState = {}; saveChecks();
+  boxes.forEach(b => b.checked = false);
+  paint(); renderCalendar();
+});
+
+/* ================= calendar view ================= */
+function renderCalendar(){
+  const {allDays, exams, examByDate} = buildSchedule();
+  const cal = document.getElementById("calendarView");
+  const monthsMap = {};
+  allDays.forEach(d => { (monthsMap[d.slice(0,7)] = monthsMap[d.slice(0,7)] || []).push(d); });
+  const monthKeys = Object.keys(monthsMap).sort();
+  cal.innerHTML = "";
+  monthKeys.forEach(mKey => {
+    const [y,m] = mKey.split("-").map(Number);
+    const first = new Date(y, m-1, 1);
+    const startWeekday = first.getDay();
+    const daysInMonth = new Date(y, m, 0).getDate();
+    const monthLabel = first.toLocaleDateString("en-GB",{month:"long",year:"numeric"});
+
+    const monthEl = document.createElement("div");
+    monthEl.className = "cal-month";
+    const title = document.createElement("h3");
+    title.className = "cal-month-title";
+    title.textContent = monthLabel;
+    monthEl.appendChild(title);
+
+    const grid = document.createElement("div");
+    grid.className = "cal-grid";
+    ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(w => {
+      const el = document.createElement("div");
+      el.className = "cal-dow"; el.textContent = w; grid.appendChild(el);
+    });
+    for(let i=0;i<startWeekday;i++){
+      const el = document.createElement("div"); el.className = "cal-cell empty"; grid.appendChild(el);
+    }
+    for(let d=1; d<=daysInMonth; d++){
+      const dIso = `${mKey}-${String(d).padStart(2,"0")}`;
+      const cell = document.createElement("div");
+      cell.className = "cal-cell" + (dIso === TODAY ? " is-today" : "");
+      const num = document.createElement("div");
+      num.className = "cal-daynum" + (dIso === TODAY ? " today" : "");
+      num.textContent = d;
+      cell.appendChild(num);
+
+      if(allDays.includes(dIso)){
+        const examsToday = examByDate[dIso] || [];
+        const holiday = HOLIDAY_MAP[dIso];
+        examsToday.forEach(e => {
+          const pill = document.createElement("div");
+          pill.className = "cal-pill exam"; pill.textContent = e.label; pill.dataset.id = dIso;
+          pill.addEventListener("click", () => jumpToDay(dIso));
+          cell.appendChild(pill);
+        });
+        if(holiday){
+          const pill = document.createElement("div");
+          pill.className = "cal-pill " + holiday.kind; pill.textContent = holiday.lab; pill.dataset.id = dIso;
+          pill.addEventListener("click", () => jumpToDay(dIso));
+          cell.appendChild(pill);
+        }
+        if(!examsToday.length && !holiday){
+          const items = [...document.querySelectorAll(`.day[data-id="${dIso}"] ul.tasks input`)];
+          if(items.length){
+            const done = items.filter(b => b.checked).length;
+            const pill = document.createElement("div");
+            pill.className = "cal-pill study"; pill.textContent = `${done}/${items.length} tasks`; pill.dataset.id = dIso;
+            pill.addEventListener("click", () => jumpToDay(dIso));
+            cell.appendChild(pill);
+          }
+        }
+      }
+      grid.appendChild(cell);
+    }
+    const rem = (7 - ((startWeekday+daysInMonth) % 7)) % 7;
+    for(let i=0;i<rem;i++){
+      const el = document.createElement("div"); el.className = "cal-cell empty"; grid.appendChild(el);
+    }
+    monthEl.appendChild(grid);
+    cal.appendChild(monthEl);
+  });
+}
+function jumpToDay(dIso){
+  switchView("list");
+  const art = document.querySelector(`.day[data-id="${dIso}"]`);
+  if(art){
+    art.scrollIntoView({block:"center",behavior:"smooth"});
+    art.classList.add("flash");
+    setTimeout(() => art.classList.remove("flash"), 1200);
+  }
+}
+
+/* ================= view toggle ================= */
+const VKEY = "tsms-viii-view-2627";
+function switchView(v){
+  document.getElementById("plan").style.display = v === "list" ? "" : "none";
+  document.getElementById("calendarView").style.display = v === "calendar" ? "" : "none";
+  document.getElementById("viewList").classList.toggle("active", v === "list");
+  document.getElementById("viewCal").classList.toggle("active", v === "calendar");
+  try{ localStorage.setItem(VKEY, v); }catch(e){}
+}
+document.getElementById("viewList").addEventListener("click", () => switchView("list"));
+document.getElementById("viewCal").addEventListener("click", () => switchView("calendar"));
+let savedView = "list";
+try{ savedView = localStorage.getItem(VKEY) || "list"; }catch(e){}
+switchView(savedView);
+
+renderAll();
+
+/* ---------- dark mode ---------- */
+const TKEY = "tsms-viii-theme";
+const themeBtn = document.getElementById("themeToggle");
+function applyTheme(mode){
+  if(mode){ document.documentElement.setAttribute("data-theme", mode); }
+  else{ document.documentElement.removeAttribute("data-theme"); }
+  const isDark = mode ? mode === "dark" :
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+  themeBtn.textContent = isDark ? "☀️" : "🌙";
+}
+let savedTheme = null;
+try{ savedTheme = localStorage.getItem(TKEY); }catch(e){}
+applyTheme(savedTheme);
+themeBtn.addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme") ||
+    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const next = current === "dark" ? "light" : "dark";
+  applyTheme(next);
+  try{ localStorage.setItem(TKEY, next); }catch(e){}
+});
+
+/* ---------- progress sidebar toggle ---------- */
+const sidebar = document.getElementById("sidebar");
+const sideOverlay = document.getElementById("sideOverlay");
+const sideTab = document.getElementById("sideTab");
+const sideClose = document.getElementById("sideClose");
+function openSidebar(){
+  sidebar.classList.add("open"); sideOverlay.classList.add("open");
+  sidebar.setAttribute("aria-hidden","false");
+}
+function closeSidebar(){
+  sidebar.classList.remove("open"); sideOverlay.classList.remove("open");
+  sidebar.setAttribute("aria-hidden","true");
+}
+sideTab.addEventListener("click", openSidebar);
+sideClose.addEventListener("click", closeSidebar);
+sideOverlay.addEventListener("click", closeSidebar);
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeSidebar(); });
+</script>
