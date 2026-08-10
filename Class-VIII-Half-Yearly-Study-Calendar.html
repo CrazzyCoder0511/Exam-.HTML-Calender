@@ -359,6 +359,17 @@
   }
   .view-btn.active{background:var(--ink); color:var(--paper)}
 
+  .export-btn{
+    display:inline-block; margin:16px 0 0 10px; padding:8px 14px;
+    border:1px solid var(--rule); border-radius:20px; background:var(--card);
+    font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink-2); cursor:pointer;
+  }
+  .export-btn:hover{border-color:var(--leaf); color:var(--leaf)}
+  @media (max-width:560px){
+    .export-btn{margin:10px 0 0}
+  }
+
   /* ---------- schedule controls (sidebar) ---------- */
   .side-section{margin-bottom:22px}
   .side-section h3{
@@ -448,6 +459,58 @@
     .phase:first-of-type{break-before:auto}
     ul.tasks input{border-color:#999}
   }
+
+  /* ---------- study-plan chatbot ---------- */
+  .chat-tab{
+    position:fixed; right:16px; bottom:16px; z-index:80;
+    width:52px; height:52px; border-radius:50%; border:1px solid var(--rule);
+    background:var(--ink); color:var(--paper); font-size:22px; cursor:pointer;
+    box-shadow:0 2px 10px var(--shadow); display:flex; align-items:center; justify-content:center;
+  }
+  .chat-tab:hover{transform:scale(1.05)}
+  .chat-panel{
+    position:fixed; right:16px; bottom:80px; z-index:80;
+    width:340px; max-width:88vw; height:460px; max-height:70vh;
+    background:var(--card); border:1px solid var(--rule); border-radius:12px;
+    box-shadow:0 8px 30px var(--shadow); display:flex; flex-direction:column;
+    overflow:hidden; transform:translateY(12px) scale(.98); opacity:0; pointer-events:none;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .chat-panel.open{transform:translateY(0) scale(1); opacity:1; pointer-events:auto}
+  .chat-head{
+    display:flex; align-items:baseline; justify-content:space-between; gap:8px;
+    padding:12px 14px; border-bottom:1px solid var(--rule);
+  }
+  .chat-head h2{font-family:var(--display); font-weight:800; font-size:15px; margin:0}
+  .chat-head p{margin:2px 0 0; font-size:11px; color:var(--ink-3); font-family:var(--mono)}
+  .chat-close{
+    font:inherit; font-family:var(--mono); font-size:11px; color:var(--ink-3);
+    background:none; border:0; cursor:pointer; padding:2px; align-self:flex-start;
+  }
+  .chat-close:hover{color:var(--red)}
+  .chat-log{flex:1; overflow-y:auto; padding:12px 14px; display:flex; flex-direction:column; gap:8px}
+  .chat-msg{
+    max-width:86%; padding:8px 11px; border-radius:12px; font-size:13px; line-height:1.4;
+    white-space:pre-wrap;
+  }
+  .chat-msg.bot{background:var(--rule-soft); color:var(--ink); align-self:flex-start; border-bottom-left-radius:3px}
+  .chat-msg.user{background:var(--ink); color:var(--paper); align-self:flex-end; border-bottom-right-radius:3px}
+  .chat-form{display:flex; gap:8px; padding:10px; border-top:1px solid var(--rule)}
+  .chat-form input{
+    flex:1; font:inherit; font-size:13px; padding:9px 11px; border:1px solid var(--rule);
+    border-radius:20px; background:var(--paper); color:var(--ink);
+  }
+  .chat-form input:focus{outline:none; border-color:var(--ink-3)}
+  .chat-form button{
+    font:inherit; font-family:var(--mono); font-size:12px; padding:0 16px; border:0;
+    border-radius:20px; background:var(--ink); color:var(--paper); cursor:pointer;
+  }
+  .chat-form button:hover{opacity:.9}
+  @media (max-width:560px){
+    .chat-tab{right:10px; bottom:10px}
+    .chat-panel{right:10px; bottom:72px; width:calc(100vw - 20px)}
+  }
+  @media print{ .chat-tab, .chat-panel{display:none} }
 </style>
 
 <div class="controls">
@@ -457,6 +520,22 @@
 <button class="side-tab" id="sideTab" type="button" aria-label="Open subject progress">
   <span class="dot"></span>Progress
 </button>
+
+<button class="chat-tab" id="chatTab" type="button" aria-label="Open study plan assistant">💬</button>
+<div class="chat-panel" id="chatPanel" aria-hidden="true">
+  <div class="chat-head">
+    <div>
+      <h2>Plan assistant</h2>
+      <p>Tell it what to change</p>
+    </div>
+    <button class="chat-close" id="chatClose" type="button">Close ✕</button>
+  </div>
+  <div class="chat-log" id="chatLog"></div>
+  <form class="chat-form" id="chatForm">
+    <input type="text" id="chatInput" placeholder="e.g. make chemistry very hard" autocomplete="off">
+    <button type="submit">Send</button>
+  </form>
+</div>
 
 <div class="side-overlay" id="sideOverlay"></div>
 <aside class="sidebar" id="sidebar" aria-hidden="true">
@@ -515,6 +594,8 @@
     <button class="view-btn" id="viewList" type="button" data-view="list">List</button>
     <button class="view-btn" id="viewCal" type="button" data-view="calendar">Calendar</button>
   </div>
+
+  <button class="reset export-btn" id="exportIcs" type="button">Export to Calendar (.ics)</button>
 
   <div class="habit">
     <h3>Every day, on top of the list</h3>
@@ -671,13 +752,26 @@ function fmtShort(dstr){
   const mon = d.toLocaleDateString("en-GB",{month:"short"});
   return `${wk} ${d.getDate()} ${mon}`;
 }
+/* date-string arithmetic done entirely in UTC — mixing toISOString() (UTC) with
+   locally-constructed midnight Date objects rolls the date back a day in any
+   positive-UTC-offset timezone (e.g. IST), so these two never touch local time. */
+function dateFromIso(dstr){
+  const [y,m,d] = dstr.split("-").map(Number);
+  return new Date(Date.UTC(y, m-1, d));
+}
+function isoFromDate(d){ return d.toISOString().slice(0,10); }
+function addDays(dstr, n){
+  const d = dateFromIso(dstr);
+  d.setUTCDate(d.getUTCDate() + n);
+  return isoFromDate(d);
+}
 
 /* ================= the auto-scheduler ================= */
 function buildSchedule(){
   const exams = getExams();
   const start = GLOBAL_START, end = exams[exams.length-1].date;
   const allDays = [];
-  for(let d=new Date(start+"T00:00:00"); iso(d) <= end; d.setDate(d.getDate()+1)) allDays.push(iso(d));
+  for(let d=dateFromIso(start); isoFromDate(d) <= end; d.setUTCDate(d.getUTCDate()+1)) allDays.push(isoFromDate(d));
 
   const examByDate = {};
   exams.forEach(e => { (examByDate[e.date] = examByDate[e.date] || []).push(e); });
@@ -920,6 +1014,82 @@ document.getElementById("reset").addEventListener("click", () => {
   paint(); renderCalendar();
 });
 
+/* ================= ICS export ================= */
+function icsEscape(s){
+  return String(s)
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\n/g, "\\n");
+}
+function icsFold(line){
+  // RFC 5545: lines should be folded at 75 octets, continuation starts with a space
+  if(line.length <= 75) return line;
+  let out = line.slice(0, 75), rest = line.slice(75);
+  while(rest.length){
+    out += "\r\n " + rest.slice(0, 74);
+    rest = rest.slice(74);
+  }
+  return out;
+}
+function toIcsDate(dstr){ return dstr.replace(/-/g, ""); }
+function buildIcs(){
+  const {allDays, daySlots, examByDate} = buildSchedule();
+  const now = new Date();
+  const stamp = now.toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//TSMS Noida//Class VIII Study Planner//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH"
+  ];
+
+  allDays.forEach(d => {
+    const examsToday = examByDate[d] || [];
+    const holiday = HOLIDAY_MAP[d];
+    const items = daySlots[d] || [];
+
+    let summary, descParts = [];
+    if(examsToday.length){
+      summary = "📝 " + examsToday.map(e => `${e.label} (${e.dur})`).join(" + ");
+      if(items.length) descParts.push("After the paper: " + items.map(it => it.text).join("; "));
+    } else if(holiday){
+      summary = (holiday.kind === "leave" ? "🏠 " : "🎉 ") + holiday.lab;
+      if(items.length) descParts.push(items.map(it => `[${SUBJ_META[it.subj].label}] ${it.text}`).join("\n"));
+    } else if(items.length){
+      const subjSet = [...new Set(items.map(it => SUBJ_META[it.subj].label))];
+      summary = "📚 Study: " + subjSet.join(", ");
+      descParts.push(items.map(it => `[${SUBJ_META[it.subj].label}] ${it.text}`).join("\n"));
+    } else {
+      return; // nothing scheduled this day, skip the event
+    }
+
+    lines.push("BEGIN:VEVENT");
+    lines.push(icsFold(`UID:${d}-tsms-viii-halfyearly@studyplanner`));
+    lines.push(`DTSTAMP:${stamp}`);
+    lines.push(`DTSTART;VALUE=DATE:${toIcsDate(d)}`);
+    lines.push(`DTEND;VALUE=DATE:${toIcsDate(addDays(d, 1))}`);
+    lines.push(icsFold(`SUMMARY:${icsEscape(summary)}`));
+    if(descParts.length) lines.push(icsFold(`DESCRIPTION:${icsEscape(descParts.join("\n"))}`));
+    lines.push("END:VEVENT");
+  });
+
+  lines.push("END:VCALENDAR");
+  return lines.join("\r\n");
+}
+document.getElementById("exportIcs").addEventListener("click", () => {
+  const blob = new Blob([buildIcs()], {type: "text/calendar;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "class-viii-study-calendar.ics";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
 /* ================= calendar view ================= */
 function renderCalendar(){
   const {allDays, exams, examByDate} = buildSchedule();
@@ -1061,4 +1231,203 @@ sideTab.addEventListener("click", openSidebar);
 sideClose.addEventListener("click", closeSidebar);
 sideOverlay.addEventListener("click", closeSidebar);
 document.addEventListener("keydown", e => { if(e.key === "Escape") closeSidebar(); });
+
+/* ================= study-plan chatbot ================= */
+const CHAT_KEY = "tsms-viii-chat-2627";
+const chatTab = document.getElementById("chatTab");
+const chatPanel = document.getElementById("chatPanel");
+const chatClose = document.getElementById("chatClose");
+const chatLog = document.getElementById("chatLog");
+const chatForm = document.getElementById("chatForm");
+const chatInput = document.getElementById("chatInput");
+
+const WELCOME = "Hi! I can tweak your study plan for you. Try things like:\n"+
+  "• “make chemistry very hard”\n"+
+  "• “move maths exam to sept 10”\n"+
+  "• “hindi paper is 3 hours”\n"+
+  "• “how's my progress”\n"+
+  "• “when's my next exam”\n"+
+  "• “show calendar” / “dark mode”\n"+
+  "• “reset my plan”";
+
+let chatHistory = [];
+try{ chatHistory = JSON.parse(localStorage.getItem(CHAT_KEY)) || []; }catch(e){ chatHistory = []; }
+function saveChatHistory(){ try{ localStorage.setItem(CHAT_KEY, JSON.stringify(chatHistory)); }catch(e){} }
+
+function addMsg(role, text, persist){
+  const div = document.createElement("div");
+  div.className = "chat-msg " + role;
+  div.textContent = text;
+  chatLog.appendChild(div);
+  chatLog.scrollTop = chatLog.scrollHeight;
+  if(persist !== false){ chatHistory.push({role, text}); saveChatHistory(); }
+}
+if(chatHistory.length){
+  chatHistory.forEach(m => addMsg(m.role, m.text, false));
+} else {
+  addMsg("bot", WELCOME);
+}
+
+function openChat(){ chatPanel.classList.add("open"); chatPanel.setAttribute("aria-hidden","false"); chatInput.focus(); }
+function closeChat(){ chatPanel.classList.remove("open"); chatPanel.setAttribute("aria-hidden","true"); }
+chatTab.addEventListener("click", () => chatPanel.classList.contains("open") ? closeChat() : openChat());
+chatClose.addEventListener("click", closeChat);
+
+/* ---- subject / exam recognition ---- */
+const SUBJECT_ALIASES = [
+  [/computer\s*practical|comp\s*practical/i, {examKey:"comp_practical", subj:"comp"}],
+  [/computer\s*theory|comp\s*theory/i, {examKey:"comp_theory", subj:"comp"}],
+  [/english\s*lit(erature)?|eng\s*lit\b|englit/i, {examKey:"englit", subj:"englit"}],
+  [/english\s*lang(uage)?|eng\s*lang\b|englang/i, {examKey:"englang", subj:"englang"}],
+  [/2nd\s*lang|second\s*lang|lang\s*2|\bfrench\b|\bsanskrit\b|\bspanish\b/i, {examKey:"lang2", subj:"lang2"}],
+  [/history\s*(&|and)?\s*civics|\bhistory\b|\bcivics\b|\bhist\b/i, {examKey:"hist", subj:"hist"}],
+  [/geography|\bgeo\b/i, {examKey:"geo", subj:"geo"}],
+  [/math(s|ematics)?/i, {examKey:"maths", subj:"maths"}],
+  [/physics|\bphy\b/i, {examKey:"physics", subj:"physics"}],
+  [/chemistry|\bchem\b/i, {examKey:"chemistry", subj:"chemistry"}],
+  [/biology|\bbio\b/i, {examKey:"biology", subj:"biology"}],
+  [/hindi/i, {examKey:"hindi", subj:"hindi"}],
+  [/computer|\bcomp\b|\bcs\b|\bict\b/i, {examKey:null, subj:"comp"}],
+  [/\benglish\b/i, {examKey:null, subj:null}]
+];
+function findSubject(text){
+  for(const [re, hit] of SUBJECT_ALIASES) if(re.test(text)) return hit;
+  return null;
+}
+
+/* ---- date & duration parsing ---- */
+const MONTHS = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12};
+function parseDate(text){
+  let m = text.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if(m) return `${m[1]}-${m[2]}-${m[3]}`;
+  const monthPat = "(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)";
+  m = text.match(new RegExp("(\\d{1,2})(?:st|nd|rd|th)?\\s+"+monthPat, "i"));
+  if(m) return mkDate(m[2], m[1]);
+  m = text.match(new RegExp(monthPat+"\\s+(\\d{1,2})(?:st|nd|rd|th)?", "i"));
+  if(m) return mkDate(m[1], m[2]);
+  return null;
+}
+function mkDate(monStr, dayStr){
+  const key = monStr.slice(0,3).toLowerCase();
+  const mon = MONTHS[key] || MONTHS[monStr.toLowerCase()];
+  if(!mon) return null;
+  const day = String(parseInt(dayStr,10)).padStart(2,"0");
+  return `2026-${String(mon).padStart(2,"0")}-${day}`;
+}
+function parseDuration(text){
+  if(/practical/i.test(text)) return "Practical";
+  const m = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h\b)/i);
+  if(m) return `${m[1]} hrs`;
+  return null;
+}
+function parseWeight(text){
+  if(/very\s*hard|hardest|extremely\s*(hard|difficult)/i.test(text)) return 5;
+  if(/very\s*easy|easiest|trivial/i.test(text)) return 1;
+  if(/\bhard\b|\bdifficult\b|struggl/i.test(text)) return 4;
+  if(/\bmedium\b|\bmoderate\b|\baverage\b/i.test(text)) return 3;
+  if(/\beasy\b|\blight\b|\bsimple\b/i.test(text)) return 2;
+  return null;
+}
+
+/* ---- main interpreter ---- */
+function interpret(raw){
+  const text = raw.trim();
+  const low = text.toLowerCase();
+
+  if(/^(hi|hello|hey)\b/.test(low)) return "Hi! Tell me what you'd like to change, or type “help” for examples.";
+  if(/\bhelp\b|what can you do/.test(low)) return WELCOME;
+
+  if(/\breset\b/.test(low) && /(plan|schedule|everything|difficult|dates?)/.test(low)){
+    examOv = {}; weightOv = {};
+    saveExamOv(); saveWeightOv();
+    renderControls(); renderAll();
+    return "Done — exam dates and difficulty are back to the default schedule.";
+  }
+  if(/\bclear\b.*(ticks|checks|checkboxes)/.test(low)){
+    checkState = {}; saveChecks();
+    boxes.forEach(b => b.checked = false);
+    paint(); renderCalendar();
+    return "Cleared every ticked task.";
+  }
+  if(/dark\s*mode|switch to dark/.test(low)){
+    applyTheme("dark"); try{ localStorage.setItem(TKEY,"dark"); }catch(e){}
+    return "Switched to dark mode.";
+  }
+  if(/light\s*mode|switch to light/.test(low)){
+    applyTheme("light"); try{ localStorage.setItem(TKEY,"light"); }catch(e){}
+    return "Switched to light mode.";
+  }
+  if(/calendar\s*view|show\s*(the\s*)?calendar/.test(low)){
+    switchView("calendar"); return "Switched to calendar view.";
+  }
+  if(/list\s*view|show\s*(the\s*)?list/.test(low)){
+    switchView("list"); return "Switched to list view.";
+  }
+  if(/(export|download).*(ics|calendar|\.ics)/.test(low)){
+    document.getElementById("exportIcs").click();
+    return "Exporting your .ics file now — check your downloads.";
+  }
+
+  if(/next\s*(exam|paper)|upcoming\s*(exam|paper)/.test(low)){
+    const exams = getExams();
+    const next = exams.find(e => e.date >= TODAY);
+    if(!next) return "You've got no exams left on the calendar — nicely done.";
+    return `Your next paper is ${next.label} on ${fmtShort(next.date)} (${next.dur}).`;
+  }
+  if(/(how'?s?|what'?s?)\s*my\s*progress|overall\s*progress/.test(low)){
+    const n = boxes.filter(b => b.checked).length;
+    return `You've ticked off ${n} of ${boxes.length} tasks overall (${boxes.length ? Math.round(n/boxes.length*100) : 0}%).`;
+  }
+
+  const hit = findSubject(low);
+  const weight = parseWeight(low);
+  const date = parseDate(low);
+  const dur = parseDuration(low);
+
+  if(hit && hit.subj === null){
+    return "Do you mean English Literature or English Language?";
+  }
+  if(low.includes("computer") && hit && hit.examKey === null && (date || dur)){
+    return "Do you mean the Computer Practical or the Computer Theory paper?";
+  }
+
+  if(hit && /progress|how.*(going|doing)/.test(low) && !weight && !date && !dur){
+    const items = [...document.querySelectorAll(`ul.tasks li[data-subj="${hit.subj}"] input`)];
+    const done = items.filter(b => b.checked).length;
+    const pct = items.length ? Math.round(done/items.length*100) : 0;
+    return `${SUBJ_META[hit.subj].label}: ${done} of ${items.length} tasks done (${pct}%).`;
+  }
+
+  if(hit && weight != null){
+    weightOv[hit.subj] = weight;
+    saveWeightOv(); renderControls(); renderAll();
+    return `Got it — set ${SUBJ_META[hit.subj].label} to “${WEIGHT_LABELS[weight]}”. It'll now get ${weight>=4?"more":weight<=2?"fewer":"about the same"} days before its paper.`;
+  }
+  if(hit && hit.examKey && (date || dur)){
+    const patch = {};
+    if(date) patch.date = date;
+    if(dur) patch.dur = dur;
+    examOv[hit.examKey] = Object.assign({}, examOv[hit.examKey], patch);
+    saveExamOv(); renderControls(); renderAll();
+    const parts = [];
+    if(date) parts.push(`moved to ${fmtShort(date)}`);
+    if(dur) parts.push(`set to ${dur}`);
+    return `Done — ${SUBJ_META[hit.subj].label} ${parts.join(" and ")}.`;
+  }
+  if(hit && !hit.examKey && (date || dur)){
+    return `${SUBJ_META[hit.subj].label} has two papers — tell me which one (Practical or Theory) to change.`;
+  }
+
+  return "I didn't quite catch that. Try “make chemistry very hard”, “move maths exam to sept 10”, or type “help” for more examples.";
+}
+
+chatForm.addEventListener("submit", e => {
+  e.preventDefault();
+  const val = chatInput.value.trim();
+  if(!val) return;
+  addMsg("user", val);
+  chatInput.value = "";
+  const reply = interpret(val);
+  setTimeout(() => addMsg("bot", reply), 150);
+});
 </script>
